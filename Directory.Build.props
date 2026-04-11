@@ -6,8 +6,8 @@
     <Product>Syntra</Product>
     <Copyright>Copyright (c) Syntra contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/syntra-dotnet/Syntra</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/syntra-dotnet/Syntra.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Bubenshi-Mike/syntra</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Bubenshi-Mike/syntra.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>mediator;cqrs;dotnet;aspnetcore;pipeline;behaviors</PackageTags>
