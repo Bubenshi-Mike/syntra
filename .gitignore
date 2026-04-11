@@ -1,6 +1,7 @@
 artifacts/
 artifacts-single/
 artifacts-ci-test/
+artifacts-verify/
 BenchmarkDotNet.Artifacts/
 [Bb]in/
 [Oo]bj/
