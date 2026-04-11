@@ -1,0 +1,31 @@
+# Push packages to NuGet.org when a version tag is pushed (e.g. v0.1.0).
+# Repository URL in Directory.Build.props must match this repo.
+# Add NUGET_API_KEY as a repository secret.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'v*.*.*-*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Pack
+        run: dotnet pack Syntra.slnx -c Release -o "${{ github.workspace }}/artifacts"
+
+      - name: Push to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate

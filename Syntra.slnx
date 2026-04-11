@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/build/" />
+  <Folder Name="/docs/" />
+  <Folder Name="/samples/">
+    <Project Path="Syntra.ConsoleApp/Syntra.ConsoleApp.csproj" Id="adf9a50d-0649-4f14-9f6b-6aa4fa080f83" />
+    <Project Path="Syntra.WebAPI/Syntra.WebAPI.csproj" Id="64227872-f90c-4fec-b726-8235e826001c" />
+    <Project Path="Syntra.WorkerService/Syntra.WorkerService.csproj" Id="bddc98a1-da8e-4cc6-ba76-2b5a0f963645" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="Syntra.Abstractions/Syntra.Abstractions.csproj" Id="1665275b-977a-4948-b529-46296419b137" />
+    <Project Path="Syntra.Analyzers/Syntra.Analyzers.csproj" Id="855203b3-7e85-4af8-885b-65d1fd1e9c81" />
+    <Project Path="Syntra.Behaviors/Syntra.Behaviors.csproj" Id="5f94cb0c-db56-48a2-8ee6-4a4ab9ffdbd0" />
+    <Project Path="Syntra.DependencyInjection/Syntra.DependencyInjection.csproj" Id="511f91bd-3010-4caa-a315-f78a0749ca35" />
+    <Project Path="Syntra.Diagnostics/Syntra.Diagnostics.csproj" Id="d79ff667-ce5a-4eb1-aaa7-f4675c87ba28" />
+    <Project Path="Syntra.SourceGenerator/Syntra.SourceGenerator.csproj" Id="3dd64c09-7804-460d-97d5-b8e98aa9c147" />
+    <Project Path="Syntra/Syntra.csproj" Id="7653ad45-cb1d-4717-8378-9dfafbf3121b" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="Syntra.Architecture.Tests/Syntra.Architecture.Tests.csproj" Id="1b4a1bac-d540-4f0d-ace9-b2a4f5b4b459" />
+    <Project Path="Syntra.Benchmarks/Syntra.Benchmarks.csproj" Id="b9abac95-8128-4a19-af5b-605236c0d08e" />
+    <Project Path="Syntra.Integration.Tests/Syntra.Integration.Tests.csproj" Id="fd7aeaaa-aab0-4073-991f-6c1b8cc44cc6" />
+    <Project Path="Syntra.Unit.Tests/Syntra.Unit.Tests.csproj" Id="69e9766e-2805-40ce-8ea5-b3498571a840" />
+  </Folder>
+</Solution>

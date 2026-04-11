@@ -1,0 +1,23 @@
+---
+description: Syntra package boundaries, project type, and layer reference rules
+alwaysApply: true
+---
+
+# Syntra — Architecture (never violate)
+
+## Project type
+
+- .NET 10 class library / NuGet package, **not** an application.
+- Do **not** suggest controllers, Minimal API, or other app-level patterns **except** under `samples/`.
+
+## Layer references
+
+- **Abstractions** (`Abstractions/`): zero external NuGet packages; no DI registration code.
+- **Core** (`Syntra/`): references **only** Abstractions.
+- **Behaviors** (`Behaviors/`): may reference Abstractions + Core (`Syntra`).
+- **DependencyInjection** (`DependencyInjection/`): may reference Core + Abstractions + Behaviors (registration, scanning).
+- Core **must not** reference DependencyInjection or Behaviors.
+
+## Naming (assemblies / folders)
+
+Align with: `Syntra.Abstractions`, `Syntra` (core), `Syntra.Behaviors`, `Syntra.DependencyInjection` as in the solution layout.

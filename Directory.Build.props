@@ -1,0 +1,47 @@
+<Project>
+  <PropertyGroup Label="NuGet / assembly">
+    <Version>0.1.0</Version>
+    <Authors>Syntra contributors</Authors>
+    <Company>Syntra</Company>
+    <Product>Syntra</Product>
+    <Copyright>Copyright (c) Syntra contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/syntra-dotnet/Syntra</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/syntra-dotnet/Syntra.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>mediator;cqrs;dotnet;aspnetcore;pipeline;behaviors</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <!-- Per-package descriptions (PackageId defaults to assembly name) -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.Abstractions'">
+    <Description>Core contracts: requests, results, handlers, notifications, and pipeline behaviors for Syntra.</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra'">
+    <Description>Syntra mediator runtime: dispatch, pipelines, notifications, and streaming queries.</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.Behaviors'">
+    <Description>Optional cross-cutting pipeline behaviors (validation, caching, retry, authorization, audit, etc.).</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.DependencyInjection'">
+    <Description>Microsoft.Extensions.DependencyInjection registration, Scrutor scanning, and Syntra configuration for DI hosts.</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.Analyzers'">
+    <Description>Roslyn analyzers for Syntra usage and configuration conventions.</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.Diagnostics'">
+    <Description>Optional diagnostics hooks and metrics integration for Syntra.</Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.SourceGenerator'">
+    <Description>Source generators complementing Syntra (build-time code generation).</Description>
+  </PropertyGroup>
+</Project>

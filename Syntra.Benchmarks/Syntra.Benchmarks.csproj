@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Syntra.Abstractions\Syntra.Abstractions.csproj" />
+    <ProjectReference Include="..\Syntra.Behaviors\Syntra.Behaviors.csproj" />
+    <ProjectReference Include="..\Syntra.DependencyInjection\Syntra.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Syntra\Syntra.csproj" />
+  </ItemGroup>
+
+</Project>

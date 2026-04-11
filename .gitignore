@@ -1,0 +1,9 @@
+artifacts/
+artifacts-single/
+BenchmarkDotNet.Artifacts/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+.idea/

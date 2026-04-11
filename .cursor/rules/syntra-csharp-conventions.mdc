@@ -1,0 +1,52 @@
+---
+description: C# language, naming, style, Result pattern, performance, and testing for Syntra
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# Syntra — C# conventions
+
+## Language
+
+- C# 14, .NET 10.
+- Primary constructors for DI; file-scoped namespaces; collection expressions (`[]`, `[.. existing]`); `required` where appropriate; prefer **records** for immutable contracts.
+
+## Naming
+
+- Interfaces: `ISyntraMediator`, `IPipelineBehavior<,>`, `IRequestHandler<,>`.
+- Core impl: `internal sealed class SyntraMediator`.
+- Options: `SyntraMediatorOptions` (**sealed**).
+- Behaviors / handlers: `sealed` types ending in `Behavior` / `Handler`.
+- One **public** type per file; filename matches type name.
+
+## Public API & async
+
+- Full XML docs on public APIs; `<example>` on the most important interfaces.
+- Public constructors: GuardClause validation.
+- `CancellationToken` last on async methods; **no** `async void` — use `Task` / `ValueTask`.
+- Prefer `ValueTask` on hot paths that often complete synchronously.
+- Use `ConfigureAwait(false)` in library code.
+
+## Result pattern
+
+- Handlers return `Task<Result>` or `Task<Result<T>>`.
+- Do **not** throw for business-rule failures; use `Result.NotFound`, `Result.ValidationFailure`, `Result.Failure`.
+- Pipeline behaviors that short-circuit return a failure `Result`, never throw.
+
+## Performance (dispatch path)
+
+- Cache handler delegates in `ConcurrentDictionary<Type, Delegate>`.
+- Use compiled lambdas, not `MethodInfo.Invoke`.
+- No LINQ in hot-path dispatch; benchmark dispatch changes (BenchmarkDotNet + memory diagnoser).
+
+## Testing
+
+- **Unit:** one class under test; **NSubstitute** for mocks.
+- **Integration:** real `ServiceProvider`; do **not** mock the mediator.
+- **Architecture:** NetArchTest.Rules.
+- **Benchmarks:** BenchmarkDotNet, memory diagnoser enabled.
+- Test helpers: **internal**, not public.
+
+## Comments
+
+- Comment **why**, not what; XML on every public interface member. Skip obvious noise.

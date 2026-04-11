@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!--
+    No external package references — this project is the dependency-free contract layer.
+    All other Syntra projects depend on this; keeping it lean ensures consumers are
+    not pulled into unrelated transitive dependencies.
+  -->
+
+</Project>
