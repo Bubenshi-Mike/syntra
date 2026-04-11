@@ -11,5 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial NuGet packaging metadata and documentation.
 - Published packages: `Syntra.Abstractions`, `Syntra`, `Syntra.Behaviors`, `Syntra.DependencyInjection`, `Syntra.Analyzers`, `Syntra.Diagnostics`, `Syntra.SourceGenerator` (see README for usage).
+- NuGet package icon (`icon.png`) for gallery listing on nuget.org.
 
 [0.1.0]: https://github.com/Bubenshi-Mike/syntra/releases/tag/v0.1.0
