@@ -16,7 +16,7 @@
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddSyntraSourceGeneratorToNugetPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <Target Name="AddSyntraSourceGeneratorToNugetPackage" DependsOnTargets="Build">
+  <Target Name="AddSyntraSourceGeneratorToNugetPackage">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>

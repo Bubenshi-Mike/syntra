@@ -17,7 +17,8 @@
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);AddSyntraAnalyzerToNugetPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <Target Name="AddSyntraAnalyzerToNugetPackage" DependsOnTargets="Build">
+  <!-- Avoid DependsOnTargets Build: pack with NoBuild invokes Build and triggers NETSDK1085. -->
+  <Target Name="AddSyntraAnalyzerToNugetPackage">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
