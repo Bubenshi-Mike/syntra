@@ -1,6 +1,5 @@
 using Polly;
 using Polly.CircuitBreaker;
-using Syntra.Behaviors.Shared;
 
 namespace Syntra.Behaviors.CircuitBreaker;
 
@@ -13,7 +12,7 @@ public sealed class CircuitBreakerBehavior<TRequest, TResponse>(
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private static readonly ConcurrentDictionary<string, AsyncPolicy> Policies = new();
+    private static readonly ConcurrentDictionary<string, ResiliencePipeline> Pipelines = new();
 
     /// <inheritdoc />
     public async Task<TResponse> HandleAsync(
@@ -25,12 +24,12 @@ public sealed class CircuitBreakerBehavior<TRequest, TResponse>(
             return await next(cancellationToken).ConfigureAwait(false);
 
         var key = typeof(TRequest).FullName ?? typeof(TRequest).Name;
-        var policy = Policies.GetOrAdd(key, _ => CreatePolicy(options));
+        var pipeline = Pipelines.GetOrAdd(key, _ => CreatePipeline(options));
 
         try
         {
-            return await policy.ExecuteAsync<TResponse>(
-                    ct => next(ct),
+            return await pipeline.ExecuteAsync<TResponse>(
+                    async ct => await next(ct).ConfigureAwait(false),
                     cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -44,12 +43,17 @@ public sealed class CircuitBreakerBehavior<TRequest, TResponse>(
         }
     }
 
-    private static AsyncPolicy CreatePolicy(CircuitBreakerOptions options)
+    private static ResiliencePipeline CreatePipeline(CircuitBreakerOptions options)
     {
-        return (AsyncPolicy)Policy
-            .Handle<Exception>(static ex => ex is not OperationCanceledException)
-            .CircuitBreakerAsync(
-                options.ExceptionsAllowedBeforeBreaking,
-                options.DurationOfBreak);
+        return new ResiliencePipelineBuilder()
+            .AddCircuitBreaker(new CircuitBreakerStrategyOptions
+            {
+                ShouldHandle = new PredicateBuilder().Handle<Exception>(static ex => ex is not OperationCanceledException),
+                MinimumThroughput = options.ExceptionsAllowedBeforeBreaking,
+                FailureRatio = 1.0,
+                SamplingDuration = options.SamplingDuration,
+                BreakDuration = options.DurationOfBreak,
+            })
+            .Build();
     }
 }
