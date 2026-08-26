@@ -24,6 +24,12 @@ jobs:
       - name: Build
         run: dotnet build Syntra.slnx -c Release --no-restore
 
+      # Known gap: coverlet's static instrumentation can't resolve Microsoft.Extensions.*
+      # assemblies trimmed from build output because Syntra.Behaviors' FrameworkReference
+      # on Microsoft.AspNetCore.App marks them as framework-provided. Syntra.Behaviors and
+      # Syntra.DependencyInjection are silently absent from the coverage report as a result
+      # (verified: neither CopyLocalLockFileAssemblies nor PreserveCompilationContext fix it).
+      # Resolving the FrameworkReference (see roadmap) would likely fix this too.
       - name: Test
         run: dotnet test Syntra.slnx -c Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory "${{ github.workspace }}/coverage"
 
