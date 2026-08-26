@@ -5,6 +5,7 @@ artifacts-verify/
 artifacts-icon-test/
 BenchmarkDotNet.Artifacts/
 coverage/
+coveragereport/
 [Bb]in/
 [Oo]bj/
 *.user

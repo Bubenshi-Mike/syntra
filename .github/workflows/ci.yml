@@ -47,3 +47,17 @@ jobs:
         with:
           name: coverage-reports
           path: coverage/**/coverage.cobertura.xml
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.5.11
+
+      # Informational only, no threshold gate yet - the current numbers are skewed by the
+      # known Syntra.Behaviors/Syntra.DependencyInjection instrumentation gap (see above),
+      # so any percentage chosen against today's baseline wouldn't be meaningful.
+      - name: Generate coverage summary
+        run: |
+          reportgenerator \
+            -reports:"coverage/**/coverage.cobertura.xml" \
+            -targetdir:"coveragereport" \
+            -reporttypes:"MarkdownSummaryGithub"
+          cat coveragereport/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
