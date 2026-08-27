@@ -26,4 +26,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Syntra.SourceGenerator.Tests" />
+  </ItemGroup>
+
 </Project>
