@@ -21,6 +21,16 @@ jobs:
       - name: Restore
         run: dotnet restore Syntra.slnx
 
+      # Report-only: a repo this young doesn't yet warrant hard-failing CI on findings.
+      # Revisit once there's a real baseline and a process for triaging/dismissing them.
+      - name: Security audit (vulnerable packages)
+        run: dotnet list Syntra.slnx package --vulnerable --include-transitive
+        continue-on-error: true
+
+      - name: Outdated packages (informational)
+        run: dotnet list Syntra.slnx package --outdated
+        continue-on-error: true
+
       - name: Build
         run: dotnet build Syntra.slnx -c Release --no-restore
 
