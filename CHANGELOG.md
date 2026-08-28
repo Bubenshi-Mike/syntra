@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `BehaviorRegistrationBuilder.AddDiagnostics()` wires `Syntra.Diagnostics`' opt-in
+  `TracingBehavior`/`RequestMetricsBehavior` into the standard pipeline builder
+  (`.AddBehaviors(b => b.AddStandardPipeline().AddDiagnostics())`), matching how every
+  other behavior is registered. Previously `Syntra.Diagnostics` shipped as a published
+  package with no way to plug it into `AddSyntra()`, no sample usage, and no tests.
+
 ## [0.1.0] - 2026-04-11
 
 ### Added
