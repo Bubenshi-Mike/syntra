@@ -24,6 +24,9 @@ jobs:
       - name: Build
         run: dotnet build Syntra.slnx -c Release --no-restore
 
+      - name: Format check
+        run: dotnet format Syntra.slnx --verify-no-changes
+
       # Known gap: coverlet's static instrumentation can't resolve Microsoft.Extensions.*
       # assemblies trimmed from build output because Syntra.Behaviors' FrameworkReference
       # on Microsoft.AspNetCore.App marks them as framework-provided. Syntra.Behaviors and
