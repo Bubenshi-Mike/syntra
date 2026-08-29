@@ -12,6 +12,8 @@ public static class BehaviorRegistrar
         ArgumentNullException.ThrowIfNull(builder);
 
         foreach (var step in builder.Steps)
+        {
             step(services);
+        }
     }
 }

@@ -23,23 +23,23 @@ namespace Syntra.Abstractions.Responses;
 public interface IPagedResponse<out TItem>
 {
     /// <summary>Items in the current page.</summary>
-    IReadOnlyList<TItem> Items { get; }
+    public IReadOnlyList<TItem> Items { get; }
 
     /// <summary>The 1-based index of the current page.</summary>
-    int Page { get; }
+    public int Page { get; }
 
     /// <summary>The maximum number of items per page as requested by the caller.</summary>
-    int PageSize { get; }
+    public int PageSize { get; }
 
     /// <summary>The total number of items across all pages.</summary>
-    int TotalCount { get; }
+    public int TotalCount { get; }
 
     /// <summary>The total number of pages, computed from <see cref="TotalCount"/> and <see cref="PageSize"/>.</summary>
-    int TotalPages { get; }
+    public int TotalPages { get; }
 
     /// <summary><c>true</c> when a page after the current one exists.</summary>
-    bool HasNextPage { get; }
+    public bool HasNextPage { get; }
 
     /// <summary><c>true</c> when a page before the current one exists.</summary>
-    bool HasPreviousPage { get; }
+    public bool HasPreviousPage { get; }
 }

@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 using Syntra.Abstractions.Mediator;
 using Syntra.DependencyInjection.Registration;
 
@@ -37,12 +36,14 @@ public sealed class DiagnosticsIntegrationTests
         meterListener.InstrumentPublished = (instrument, listener) =>
         {
             if (instrument.Meter.Name == "Syntra" && instrument.Name == "syntra.requests.duration")
+            {
                 listener.EnableMeasurementEvents(instrument);
+            }
         };
         meterListener.SetMeasurementEventCallback<double>((_, measurement, _, _) => recordedDurations.Add(measurement));
         meterListener.Start();
 
-        var result = await mediator.SendAsync(new IntegPingQuery()).ConfigureAwait(false);
+        var result = await mediator.SendAsync(new IntegPingQuery());
 
         Assert.True(result.IsSuccess);
 

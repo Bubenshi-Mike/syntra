@@ -1,9 +1,6 @@
 using System.Reflection;
 using FluentValidation;
-using Scrutor;
 using Syntra.Abstractions.Guards;
-using Syntra.Abstractions.Handlers;
-using Syntra.Abstractions.Notifications;
 using Syntra.Behaviors.Audit;
 using Syntra.Behaviors.Transactions;
 
@@ -27,7 +24,9 @@ public static class SyntraAssemblyScanner
 
         var assemblyArray = assemblies as Assembly[] ?? assemblies.ToArray();
         if (assemblyArray.Length == 0)
+        {
             return;
+        }
 
         // IRequestHandler<,> — commands & queries (includes ICommandHandler, IQueryHandler)
         services.Scan(scan => scan

@@ -19,7 +19,7 @@ public sealed class ValidationBehaviorTests
         var response = await behavior.HandleAsync(
             new UnitPingQuery(),
             _ => Task.FromResult(Result.Success(9)),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None);
 
         Assert.True(response.IsSuccess);
         Assert.Equal(9, response.Value);

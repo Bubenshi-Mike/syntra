@@ -1,4 +1,3 @@
-using Syntra.Abstractions.Notifications;
 using Syntra.Options;
 
 namespace Syntra.Unit.Tests.Tests.Unit.Notifications;

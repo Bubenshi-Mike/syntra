@@ -6,5 +6,5 @@ namespace Syntra.Behaviors.Audit;
 public interface IAuditWriter
 {
     /// <summary>Persists <paramref name="entry"/>.</summary>
-    Task WriteAsync(AuditEntry entry, CancellationToken cancellationToken = default);
+    public Task WriteAsync(AuditEntry entry, CancellationToken cancellationToken = default);
 }

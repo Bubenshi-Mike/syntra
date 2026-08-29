@@ -17,12 +17,16 @@ public sealed class TimeoutBehavior<TRequest, TResponse>(
         CancellationToken cancellationToken = default)
     {
         if (request is not ITimeoutRequest timeoutRequest)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         var timeout = timeoutRequest.Timeout ?? options.DefaultTimeout;
 
         if (timeout <= TimeSpan.Zero)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         linked.CancelAfter(timeout);

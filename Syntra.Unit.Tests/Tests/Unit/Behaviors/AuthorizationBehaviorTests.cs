@@ -25,7 +25,7 @@ public sealed class AuthorizationBehaviorTests
         var response = await behavior.HandleAsync(
             new UnitPingQuery(),
             _ => Task.FromResult(Result.Success(11)),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None);
 
         Assert.True(response.IsSuccess);
         Assert.Equal(11, response.Value);

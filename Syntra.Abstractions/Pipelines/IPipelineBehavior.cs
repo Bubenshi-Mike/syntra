@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Requests;
-
 namespace Syntra.Abstractions.Pipelines;
 
 /// <summary>
@@ -47,7 +45,7 @@ public interface IPipelineBehavior<in TRequest, TResponse>
     /// A task resolving to <typeparamref name="TResponse"/>.
     /// Either the result of calling <paramref name="next"/>, or a locally-produced response.
     /// </returns>
-    Task<TResponse> HandleAsync(
+    public Task<TResponse> HandleAsync(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken = default);

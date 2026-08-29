@@ -19,7 +19,7 @@ public sealed class TransactionBehaviorTests
         var response = await behavior.HandleAsync(
             new UnitPingQuery(),
             _ => Task.FromResult(Result.Success(6)),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None);
 
         Assert.True(response.IsSuccess);
         await tm.DidNotReceive().BeginTransactionAsync(Arg.Any<CancellationToken>());

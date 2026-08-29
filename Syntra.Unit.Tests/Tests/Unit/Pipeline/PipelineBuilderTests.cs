@@ -21,7 +21,7 @@ public sealed class PipelineBuilderTests
             request,
             new IPipelineBehavior<UnitPingQuery, Result<int>>[] { outer, inner });
 
-        var response = await pipeline(CancellationToken.None).ConfigureAwait(false);
+        var response = await pipeline(CancellationToken.None);
 
         Assert.True(response.IsSuccess);
         Assert.Equal(42, response.Value);

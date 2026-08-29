@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Requests;
-
 namespace Syntra.Abstractions.Guards;
 
 /// <summary>
@@ -30,5 +28,5 @@ public interface IAuthorizedRequest : IRequest
     /// The name of the policy that the current user must satisfy.
     /// <c>null</c> means any authenticated user is allowed (authentication only, no policy check).
     /// </summary>
-    string? RequiredPolicy => null;
+    public string? RequiredPolicy => null;
 }

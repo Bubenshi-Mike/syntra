@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -26,18 +25,27 @@ public sealed class DuplicateHandlerAnalyzer : DiagnosticAnalyzer
         foreach (var type in SymbolHelpers.EnumerateNamedTypes(compilation.GlobalNamespace))
         {
             if (type.TypeKind is not (TypeKind.Class or TypeKind.Struct))
+            {
                 continue;
+            }
+
             if (type.IsAbstract)
+            {
                 continue;
+            }
 
             if (!type.AllInterfaces.Any(static i =>
                     i.OriginalDefinition.MetadataName is "ICommandHandler`1" or "ICommandHandler`2"))
+            {
                 continue;
+            }
 
             foreach (var iface in type.AllInterfaces)
             {
                 if (iface.OriginalDefinition.MetadataName != "IRequestHandler`2" || iface.TypeArguments.Length != 2)
+                {
                     continue;
+                }
 
                 Add(groups, ((INamedTypeSymbol)iface.TypeArguments[0], iface.TypeArguments[1]), type);
                 break;
@@ -48,7 +56,9 @@ public sealed class DuplicateHandlerAnalyzer : DiagnosticAnalyzer
         {
             var list = entry.Value;
             if (list.Count <= 1)
+            {
                 continue;
+            }
 
             var cmdDisplay = entry.Key.Cmd.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat);
             foreach (var handler in list)

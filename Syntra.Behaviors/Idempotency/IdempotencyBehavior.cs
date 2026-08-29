@@ -24,7 +24,9 @@ public sealed class IdempotencyBehavior<TRequest, TResponse>(
         CancellationToken cancellationToken = default)
     {
         if (!IdempotencyKeyResolver.TryGetKey(request, out var key))
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         var cacheKey = $"{options.CacheKeyPrefix}{typeof(TRequest).FullName}:{key:N}";
 
@@ -34,13 +36,17 @@ public sealed class IdempotencyBehavior<TRequest, TResponse>(
             logger.LogDebug("Idempotency cache hit for {CacheKey}", cacheKey);
             var cached = JsonSerializer.Deserialize<TResponse>(existing, JsonOptions);
             if (cached is not null)
+            {
                 return cached;
+            }
         }
 
         var response = await next(cancellationToken).ConfigureAwait(false);
 
         if (response is Result { IsFailure: true })
+        {
             return response;
+        }
 
         try
         {
