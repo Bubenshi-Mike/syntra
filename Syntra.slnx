@@ -16,9 +16,11 @@
     <Project Path="Syntra/Syntra.csproj" Id="7653ad45-cb1d-4717-8378-9dfafbf3121b" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="Syntra.Analyzers.Tests/Syntra.Analyzers.Tests.csproj" Id="01eca485-0f1b-4fed-bdae-b594cbd6c8e2" />
     <Project Path="Syntra.Architecture.Tests/Syntra.Architecture.Tests.csproj" Id="1b4a1bac-d540-4f0d-ace9-b2a4f5b4b459" />
     <Project Path="Syntra.Benchmarks/Syntra.Benchmarks.csproj" Id="b9abac95-8128-4a19-af5b-605236c0d08e" />
     <Project Path="Syntra.Integration.Tests/Syntra.Integration.Tests.csproj" Id="fd7aeaaa-aab0-4073-991f-6c1b8cc44cc6" />
+    <Project Path="Syntra.SourceGenerator.Tests/Syntra.SourceGenerator.Tests.csproj" Id="f5a30e04-3bdf-4a3d-8a90-68239657aa05" />
     <Project Path="Syntra.Unit.Tests/Syntra.Unit.Tests.csproj" Id="69e9766e-2805-40ce-8ea5-b3498571a840" />
   </Folder>
 </Solution>
