@@ -1,6 +1,5 @@
 <Project>
   <PropertyGroup Label="NuGet / assembly">
-    <Version>0.1.0</Version>
     <Authors>Syntra contributors</Authors>
     <Company>Syntra</Company>
     <Product>Syntra</Product>
@@ -45,4 +44,45 @@
   <PropertyGroup Condition="'$(MSBuildProjectName)' == 'Syntra.SourceGenerator'">
     <Description>Source generators complementing Syntra (build-time code generation).</Description>
   </PropertyGroup>
+
+  <!--
+    Package version: Major.Height, where Height is the git commit count reachable from HEAD -
+    auto-increments with every commit that lands on main. NuGet package versions must be valid
+    SemVer (3+ numeric segments), so the actual packed version comes out as Major.Height.0 - the
+    trailing .0 is NuGet's own mandatory padding, not a meaningful third dimension.
+
+    Tried Nerdbank.GitVersioning first; dropped it after confirming it silently discards even an
+    explicit command-line -p:Version= override right before nuspec generation (its own internal
+    recomputation wins no matter what), and its "version height" concept has no supported way to
+    put height in the Minor position anyway - height is always an additional segment appended
+    after a fixed Major.Minor. A bare git Exec is simpler and nothing fights it.
+
+    CI computes and passes the real value explicitly via -p:Version= (see ci.yml/release.yml).
+    This target is only a same-machine fallback so a plain local `dotnet build`/`pack` never
+    silently produces the SDK's own "1.0.0" default; it's skipped entirely whenever Version was
+    already supplied on the command line.
+  -->
+  <PropertyGroup>
+    <SyntraVersionMajor>2</SyntraVersionMajor>
+  </PropertyGroup>
+
+  <!--
+    The SDK sets a parse-time default of Version=1.0.0 before this target's Condition is ever
+    checked (parse-time PropertyGroups run before any target executes), so checking only for
+    empty never catches it - the SDK's own default must be matched explicitly too.
+  -->
+  <Target Name="SyntraComputeFallbackVersion" BeforeTargets="GetPackageVersion;GenerateNuspec;CoreCompile" Condition="'$(Version)' == '' Or '$(Version)' == '1.0.0'">
+    <Exec Command="git rev-list --count HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="WarnAndContinue">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_SyntraGitHeight" />
+    </Exec>
+    <Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="WarnAndContinue">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_SyntraGitSha" />
+    </Exec>
+    <PropertyGroup>
+      <_SyntraGitHeight Condition="'$(_SyntraGitHeight)' == ''">0</_SyntraGitHeight>
+      <_SyntraGitSha Condition="'$(_SyntraGitSha)' == ''">unknown</_SyntraGitSha>
+      <Version>$(SyntraVersionMajor).$(_SyntraGitHeight)-g$(_SyntraGitSha)</Version>
+      <PackageVersion>$(Version)</PackageVersion>
+    </PropertyGroup>
+  </Target>
 </Project>
