@@ -46,10 +46,20 @@
   </PropertyGroup>
 
   <!--
-    Package version: Major.Height, where Height is the git commit count reachable from HEAD -
-    auto-increments with every commit that lands on main. NuGet package versions must be valid
-    SemVer (3+ numeric segments), so the actual packed version comes out as Major.Height.0 - the
-    trailing .0 is NuGet's own mandatory padding, not a meaningful third dimension.
+    Package version: MajorBase + floor(MergeCount / 10) . (MergeCount mod 10), where MergeCount
+    is the number of "Merge pull request #N" commits reachable from HEAD - one increment per PR
+    actually merged into main, not per individual commit (raw commit count grows far faster than
+    real releases - it was already past 50 within the project's first day). Minor cycles 0-9 and
+    rolls into an extra Major increment every 10 merges, so every published version keeps
+    strictly increasing even as Minor wraps - required for `Version="2.*"`-style floating
+    references to always resolve to the true latest (a Minor that reset to 0 without a Major
+    bump would make that release permanently invisible to consumers already on a higher Minor).
+    MajorBase itself is still bumped by hand for real breaking milestones; the auto-bump on top
+    of it exists purely to preserve monotonic ordering as Minor cycles.
+
+    NuGet package versions must be valid SemVer (3+ numeric segments), so the actual packed
+    version comes out as Major.Minor.0 - the trailing .0 is NuGet's own mandatory padding, not a
+    meaningful third dimension.
 
     Tried Nerdbank.GitVersioning first; dropped it after confirming it silently discards even an
     explicit command-line -p:Version= override right before nuspec generation (its own internal
@@ -63,7 +73,7 @@
     already supplied on the command line.
   -->
   <PropertyGroup>
-    <SyntraVersionMajor>2</SyntraVersionMajor>
+    <SyntraVersionMajorBase>2</SyntraVersionMajorBase>
   </PropertyGroup>
 
   <!--
@@ -72,16 +82,20 @@
     empty never catches it - the SDK's own default must be matched explicitly too.
   -->
   <Target Name="SyntraComputeFallbackVersion" BeforeTargets="GetPackageVersion;GenerateNuspec;CoreCompile" Condition="'$(Version)' == '' Or '$(Version)' == '1.0.0'">
-    <Exec Command="git rev-list --count HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="WarnAndContinue">
-      <Output TaskParameter="ConsoleOutput" PropertyName="_SyntraGitHeight" />
+    <Exec Command="git rev-list --count --merges --grep=&quot;^Merge pull request&quot; HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="WarnAndContinue">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_SyntraMergeCount" />
     </Exec>
     <Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" ContinueOnError="WarnAndContinue">
       <Output TaskParameter="ConsoleOutput" PropertyName="_SyntraGitSha" />
     </Exec>
     <PropertyGroup>
-      <_SyntraGitHeight Condition="'$(_SyntraGitHeight)' == ''">0</_SyntraGitHeight>
+      <_SyntraMergeCount Condition="'$(_SyntraMergeCount)' == ''">0</_SyntraMergeCount>
       <_SyntraGitSha Condition="'$(_SyntraGitSha)' == ''">unknown</_SyntraGitSha>
-      <Version>$(SyntraVersionMajor).$(_SyntraGitHeight)-g$(_SyntraGitSha)</Version>
+      <_SyntraMinor>$([MSBuild]::Modulo($(_SyntraMergeCount), 10))</_SyntraMinor>
+      <_SyntraMajorBumpTimes10>$([MSBuild]::Subtract($(_SyntraMergeCount), $(_SyntraMinor)))</_SyntraMajorBumpTimes10>
+      <_SyntraMajorBump>$([MSBuild]::Divide($(_SyntraMajorBumpTimes10), 10))</_SyntraMajorBump>
+      <_SyntraMajor>$([MSBuild]::Add($(SyntraVersionMajorBase), $(_SyntraMajorBump)))</_SyntraMajor>
+      <Version>$(_SyntraMajor).$(_SyntraMinor)-g$(_SyntraGitSha)</Version>
       <PackageVersion>$(Version)</PackageVersion>
     </PropertyGroup>
   </Target>

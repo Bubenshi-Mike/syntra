@@ -21,8 +21,8 @@ jobs:
       contents: read
     steps:
       # Full history (not the default shallow clone) - the package version is derived from
-      # the total commit count via `git rev-list --count HEAD` (see Directory.Build.props),
-      # which needs the whole history to be accurate.
+      # the count of "Merge pull request" commits via `git rev-list --count --merges --grep=...`
+      # (see Directory.Build.props), which needs the whole history to be accurate.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -31,13 +31,17 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      # Same Major.Height.0 computation as the CI workflow, but without the -g{sha} suffix -
-      # this is a public release, not a CI build artifact. The tag that triggered this workflow
-      # is only what starts the publish; the actual version comes from the commit count so there
-      # is still no manual number-picking anywhere in the process.
+      # Same Major.Minor.0 computation as the fallback target in Directory.Build.props, but
+      # without the -g{sha} suffix - this is a public release, not a CI build artifact. The tag
+      # that triggered this workflow (if any) is only what starts the publish; the actual version
+      # always comes from the merge count so there is still no manual number-picking anywhere.
+      # The base "2" here must be kept in sync by hand with SyntraVersionMajorBase in
+      # Directory.Build.props - bump both together for a real breaking-milestone Major change.
       - name: Compute version
         id: version
-        run: echo "value=2.$(git rev-list --count HEAD).0" >> "$GITHUB_OUTPUT"
+        run: |
+          count=$(git rev-list --count --merges --grep="^Merge pull request" HEAD)
+          echo "value=$(( 2 + count / 10 )).$(( count % 10 )).0" >> "$GITHUB_OUTPUT"
 
       - name: Pack
         run: dotnet pack Syntra.slnx -c Release -o "${{ github.workspace }}/artifacts" -p:Version=${{ steps.version.outputs.value }}
