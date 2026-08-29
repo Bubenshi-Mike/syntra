@@ -16,7 +16,7 @@ public sealed class LoggingBehaviorTests
         var response = await behavior.HandleAsync(
             new UnitPingQuery(),
             _ => Task.FromResult(Result.Success(1)),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None);
 
         Assert.True(response.IsSuccess);
     }

@@ -28,7 +28,9 @@ public sealed class CachingBehavior<TRequest, TResponse>(
         CancellationToken cancellationToken = default)
     {
         if (request is not ICacheableQuery cacheableQuery)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         var cacheKey = cacheKeyGenerator.BuildCacheKey(request, typeof(TRequest));
 
@@ -42,7 +44,9 @@ public sealed class CachingBehavior<TRequest, TResponse>(
             {
                 var cached = JsonSerializer.Deserialize<TResponse>(cachedBytes, _jsonOptions);
                 if (cached is not null)
+                {
                     return cached;
+                }
             }
             catch (JsonException ex)
             {
@@ -55,7 +59,9 @@ public sealed class CachingBehavior<TRequest, TResponse>(
         var response = await next(cancellationToken).ConfigureAwait(false);
 
         if (response is Result result && result.IsFailure)
+        {
             return response;
+        }
 
         try
         {
@@ -64,7 +70,9 @@ public sealed class CachingBehavior<TRequest, TResponse>(
             var entryOptions = new DistributedCacheEntryOptions();
             var ttl = cacheableQuery.CacheDuration ?? cacheOptions.DefaultExpiration;
             if (ttl.HasValue)
+            {
                 entryOptions.AbsoluteExpirationRelativeToNow = ttl;
+            }
 
             await cache.SetAsync(cacheKey, bytes, entryOptions, cancellationToken).ConfigureAwait(false);
 

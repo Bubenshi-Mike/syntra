@@ -1,5 +1,4 @@
 using System.Reflection;
-using Syntra.Abstractions.Commands;
 
 namespace Syntra.Behaviors.Idempotency;
 
@@ -19,9 +18,14 @@ internal static class IdempotencyKeyResolver
         foreach (var itf in request.GetType().GetInterfaces())
         {
             if (!itf.IsGenericType)
+            {
                 continue;
+            }
+
             if (itf.GetGenericTypeDefinition() != typeof(IIdempotentCommand<>))
+            {
                 continue;
+            }
 
             var prop = itf.GetProperty(nameof(IIdempotentCommand.IdempotencyKey), BindingFlags.Public | BindingFlags.Instance);
             if (prop?.GetValue(request) is Guid g)

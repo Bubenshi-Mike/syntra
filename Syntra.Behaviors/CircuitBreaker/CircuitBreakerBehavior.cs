@@ -21,7 +21,9 @@ public sealed class CircuitBreakerBehavior<TRequest, TResponse>(
         CancellationToken cancellationToken = default)
     {
         if (request is not ICircuitBreakableRequest)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         var key = typeof(TRequest).FullName ?? typeof(TRequest).Name;
         var pipeline = Pipelines.GetOrAdd(key, _ => CreatePipeline(options));

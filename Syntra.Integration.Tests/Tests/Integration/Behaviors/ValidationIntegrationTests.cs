@@ -1,6 +1,5 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 using Syntra.Abstractions.Handlers;
 using Syntra.Abstractions.Mediator;
 using Syntra.Abstractions.Requests;
@@ -41,7 +40,7 @@ public sealed class ValidationIntegrationTests
         using var scope = sp.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<ISyntraMediator>();
 
-        var result = await mediator.SendAsync(new ValidatedQuery(0)).ConfigureAwait(false);
+        var result = await mediator.SendAsync(new ValidatedQuery(0));
 
         Assert.True(result.IsFailure);
     }

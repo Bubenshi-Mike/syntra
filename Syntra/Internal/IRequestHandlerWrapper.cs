@@ -20,7 +20,7 @@ internal interface IRequestHandlerWrapper<TResponse> : IRequestHandlerWrapper
     /// <param name="request">The request, cast internally to the concrete request type.</param>
     /// <param name="serviceProvider">Scoped DI container for resolving handlers and behaviors.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
-    Task<TResponse> HandleAsync(
+    public Task<TResponse> HandleAsync(
         object request,
         IServiceProvider serviceProvider,
         CancellationToken cancellationToken);

@@ -1,8 +1,14 @@
 # Syntra
 
+[![CI](https://github.com/Bubenshi-Mike/syntra/actions/workflows/ci.yml/badge.svg)](https://github.com/Bubenshi-Mike/syntra/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/Syntra.svg?label=Syntra)](https://www.nuget.org/packages/Syntra)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Syntra is a **.NET 10** mediator-style library with **CQRS-friendly** requests, **railway-oriented** `Result` types, **pipeline behaviors**, **notifications**, and **streaming queries**. Optional **Roslyn analyzers** help keep registration and conventions consistent.
 
 > **Target framework:** `net10.0`. **Repository:** [github.com/Bubenshi-Mike/syntra](https://github.com/Bubenshi-Mike/syntra).
+>
+> Pre-`v0.1.0`: not yet published to NuGet.org. The badges above will resolve once it is.
 
 ## Packages
 
@@ -13,7 +19,7 @@ Syntra is a **.NET 10** mediator-style library with **CQRS-friendly** requests, 
 | `Syntra.Behaviors` | Cross-cutting behaviors (validation, caching, retry, auth, audit, …). |
 | `Syntra.DependencyInjection` | `AddSyntra`, Scrutor scanning, configuration binding. |
 | `Syntra.Analyzers` | Roslyn analyzers (reference as analyzer; `PrivateAssets="all"`). |
-| `Syntra.Diagnostics` | Optional diagnostics integration. |
+| `Syntra.Diagnostics` | Opt-in tracing (`ActivitySource`) and metrics behaviors — enable with `.AddBehaviors(b => b.AddStandardPipeline().AddDiagnostics())`. |
 | `Syntra.SourceGenerator` | Optional source generators. |
 
 ## Quick start
@@ -55,6 +61,15 @@ dotnet pack -c Release -o ./artifacts
 A local pack without an explicit `-p:Version=` gets a version derived from your current commit
 (`Major.Height.0-g{shortsha}`) so it's never mistaken for an official build. CI computes and
 passes the real value explicitly - see `Directory.Build.props`.
+
+Every merge to `main` also publishes the resulting version to NuGet.org automatically - see
+`release.yml`.
+
+## Roadmap
+
+Before a `v1.0.0` release:
+
+- [ ] See [CHANGELOG](CHANGELOG.md) `Unreleased` for architecture changes already landed
 
 ## License
 

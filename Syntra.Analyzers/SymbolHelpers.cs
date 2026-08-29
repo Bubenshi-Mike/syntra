@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
 namespace Syntra.Analyzers;
@@ -10,13 +9,17 @@ internal static class SymbolHelpers
         foreach (var nestedNs in ns.GetNamespaceMembers())
         {
             foreach (var t in EnumerateNamedTypes(nestedNs))
+            {
                 yield return t;
+            }
         }
 
         foreach (var type in ns.GetTypeMembers())
         {
             foreach (var t in EnumerateNestedAndSelf(type))
+            {
                 yield return t;
+            }
         }
     }
 
@@ -26,7 +29,9 @@ internal static class SymbolHelpers
         foreach (var nested in type.GetTypeMembers())
         {
             foreach (var t in EnumerateNestedAndSelf(nested))
+            {
                 yield return t;
+            }
         }
     }
 
@@ -53,7 +58,9 @@ internal static class SymbolHelpers
         foreach (var member in type.GetMembers("HandleAsync"))
         {
             if (member is IMethodSymbol { Parameters.Length: >= 1 } m)
+            {
                 return m;
+            }
         }
 
         return null;
@@ -62,7 +69,10 @@ internal static class SymbolHelpers
     public static bool LastParameterIsCancellationToken(IMethodSymbol method)
     {
         if (method.Parameters.Length == 0)
+        {
             return false;
+        }
+
         var last = method.Parameters[method.Parameters.Length - 1];
         return last.Type.Name == "CancellationToken";
     }

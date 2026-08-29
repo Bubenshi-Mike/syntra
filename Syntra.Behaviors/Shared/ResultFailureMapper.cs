@@ -1,6 +1,3 @@
-using System.Collections.Concurrent;
-using System.Reflection;
-
 namespace Syntra.Behaviors.Shared;
 
 /// <summary>
@@ -29,7 +26,9 @@ public static class ResultFailureMapper
     {
         ArgumentNullException.ThrowIfNull(errors);
         if (errors.Count == 0)
+        {
             throw new ArgumentException("At least one error is required.", nameof(errors));
+        }
 
         var array = errors as Error[] ?? errors.ToArray();
         return MultiErrorFactories.GetOrAdd(responseType, BuildMultiErrorFactory)(array);
@@ -46,7 +45,9 @@ public static class ResultFailureMapper
     private static Func<Error, object> BuildSingleErrorFactory(Type responseType)
     {
         if (responseType == typeof(Result))
+        {
             return static e => Result.Failure(e);
+        }
 
         if (responseType.IsGenericType &&
             responseType.GetGenericTypeDefinition() == typeof(Result<>))
@@ -69,7 +70,9 @@ public static class ResultFailureMapper
     private static Func<Error[], object> BuildMultiErrorFactory(Type responseType)
     {
         if (responseType == typeof(Result))
+        {
             return static errors => Result.Failure(errors);
+        }
 
         if (responseType.IsGenericType &&
             responseType.GetGenericTypeDefinition() == typeof(Result<>))

@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Requests;
-
 namespace Syntra.Abstractions.Handlers;
 
 /// <summary>
@@ -25,5 +23,5 @@ public interface IRequestHandler<in TRequest, TResponse>
     /// <param name="request">The request to handle. Never <c>null</c>.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
     /// <returns>A task that resolves to the handler's response.</returns>
-    Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
+    public Task<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
 }

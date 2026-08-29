@@ -20,13 +20,19 @@ public sealed class NamingConventionAnalyzer : DiagnosticAnalyzer
     private static void AnalyzeNamedType(SymbolAnalysisContext context)
     {
         if (context.Symbol is not INamedTypeSymbol type)
+        {
             return;
+        }
 
         if (type.TypeKind is not (TypeKind.Class or TypeKind.Struct))
+        {
             return;
+        }
 
         if (type.IsAbstract)
+        {
             return;
+        }
 
         var isRequestOrStreamHandler = type.AllInterfaces.Any(static i =>
             i.OriginalDefinition.MetadataName is "IRequestHandler`2" or "IStreamQueryHandler`2");

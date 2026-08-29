@@ -7,5 +7,5 @@ namespace Syntra.Behaviors.Timeout;
 public interface ITimeoutRequest
 {
     /// <summary>Per-request deadline, or <c>null</c> to use global default.</summary>
-    TimeSpan? Timeout { get; }
+    public TimeSpan? Timeout { get; }
 }

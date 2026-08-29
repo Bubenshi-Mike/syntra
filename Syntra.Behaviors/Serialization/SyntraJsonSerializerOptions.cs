@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Linq;
 
 namespace Syntra.Behaviors.Serialization;
 
@@ -21,7 +20,10 @@ public static class SyntraJsonSerializerOptions
     {
         var o = new JsonSerializerOptions(user);
         if (!o.Converters.Any(static c => c is ResultJsonConverterFactory))
+        {
             o.Converters.Add(new ResultJsonConverterFactory());
+        }
+
         return o;
     }
 }

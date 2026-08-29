@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Syntra.Abstractions.Pipelines;
 using Syntra.Behaviors.Audit;
 using Syntra.Behaviors.Authorization;
 using Syntra.Behaviors.Caching;
