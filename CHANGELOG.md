@@ -19,8 +19,11 @@ whenever that automatic bump happens, roughly every 10 merges. See
   `main` (not raw commit count, which grows much faster) and cycles 0-9, rolling into an
   automatic `Major` increment every 10 merges to keep versions strictly increasing - computed in
   `Directory.Build.props`, `ci.yml`, `release.yml`. Starting `Major` base is `2`.
-- Every merge to `main` now also publishes the resulting version to NuGet.org automatically
-  (`release.yml`), not just an explicitly pushed version tag.
+- Every merge to `main` that actually touches a packable project's source, shared build/version
+  metadata, or the embedded README/LICENSE/icon now publishes the resulting version to
+  NuGet.org automatically (`release.yml`) - not just an explicitly pushed version tag. A
+  docs-only, CI-only, sample-only, or test-only merge is skipped so the published version
+  doesn't churn for changes nobody consuming the packages would ever see.
 - NuGet package icon replaced with the new Syntra logo.
 
 ### Added
