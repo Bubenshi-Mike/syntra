@@ -3,19 +3,25 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version numbers
-are `Major.Height.0`: `Major` is bumped by hand for real breaking milestones, `Height` is the git
-commit count and auto-increments on every merge to `main` - it does **not** carry Semantic
-Versioning's usual "new feature vs. fix" meaning. See [README](README.md#quick-start) for details.
+are `Major.Minor.0`: `Minor` auto-increments once per PR merged into `main` and cycles 0-9;
+`Major` starts at a hand-picked base (bumped for real breaking milestones) but also gets an
+automatic +1 every time `Minor` wraps back to 0, purely to keep every published version strictly
+higher than the last - it does **not** carry Semantic Versioning's usual "new feature vs. fix vs.
+breaking change" meaning. A floating `Major.*` package reference will stop tracking new releases
+whenever that automatic bump happens, roughly every 10 merges. See
+[README](README.md#quick-start) for details.
 
 ## [Unreleased]
 
 ### Changed
 
-- Package versioning is now automatic: `Major.Height.0`, where `Height` is the git commit count
-  and increments on every merge to `main`, computed in CI (`Directory.Build.props`,
-  `ci.yml`, `release.yml`). Starting `Major` is `2`.
-
-## [Unreleased]
+- Package versioning is now `Major.Minor.0`, where `Minor` is the count of PRs merged into
+  `main` (not raw commit count, which grows much faster) and cycles 0-9, rolling into an
+  automatic `Major` increment every 10 merges to keep versions strictly increasing - computed in
+  `Directory.Build.props`, `ci.yml`, `release.yml`. Starting `Major` base is `2`.
+- Every merge to `main` now also publishes the resulting version to NuGet.org automatically
+  (`release.yml`), not just an explicitly pushed version tag.
+- NuGet package icon replaced with the new Syntra logo.
 
 ### Added
 
