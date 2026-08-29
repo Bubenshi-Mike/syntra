@@ -1,4 +1,3 @@
-using Syntra.Abstractions.Requests;
 using Syntra.Internal;
 using Syntra.Pipelines;
 

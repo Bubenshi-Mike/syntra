@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using NSubstitute;
 using Syntra.Abstractions.Results;
 using Syntra.Behaviors.Caching;
@@ -24,7 +23,7 @@ public sealed class CachingBehaviorTests
         var response = await behavior.HandleAsync(
             new UnitPingQuery(),
             _ => Task.FromResult(Result.Success(3)),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None);
 
         Assert.True(response.IsSuccess);
         await cache.DidNotReceive()

@@ -1,5 +1,4 @@
 using FluentValidation;
-using Syntra.Behaviors.Shared;
 
 namespace Syntra.Behaviors.Validation;
 
@@ -22,7 +21,9 @@ public sealed class ValidationBehavior<TRequest, TResponse>(
         var validatorArray = validators as IValidator<TRequest>[] ?? validators.ToArray();
 
         if (validatorArray.Length == 0)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         logger.LogDebug(
             "Running {ValidatorCount} validator(s) for {RequestName}",
@@ -40,7 +41,9 @@ public sealed class ValidationBehavior<TRequest, TResponse>(
             .ToArray();
 
         if (failures.Length == 0)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         logger.LogDebug(
             "Validation failed for {RequestName} with {FailureCount} error(s)",

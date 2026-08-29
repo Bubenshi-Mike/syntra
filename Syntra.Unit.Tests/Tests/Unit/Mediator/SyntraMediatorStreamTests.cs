@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Syntra.Abstractions.Handlers;
-using Syntra.DependencyInjection.Registration;
 using Syntra.Abstractions.Mediator;
+using Syntra.DependencyInjection.Registration;
 using Syntra.Unit.Tests.Tests.Unit.Shared;
 
 namespace Syntra.Unit.Tests.Tests.Unit.Mediator;
@@ -23,7 +23,9 @@ public sealed class SyntraMediatorStreamTests
 
         var items = new List<int>();
         await foreach (var n in mediator.CreateStreamAsync(new UnitStreamNumbersQuery()).ConfigureAwait(false))
+        {
             items.Add(n);
+        }
 
         Assert.Equal(new[] { 1, 2 }, items);
     }

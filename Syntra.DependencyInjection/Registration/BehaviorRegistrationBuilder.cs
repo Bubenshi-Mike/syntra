@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Syntra.Behaviors.Extensions;
 using Syntra.Diagnostics.Extensions;
 
@@ -28,7 +27,10 @@ public sealed class BehaviorRegistrationBuilder
         AddTimeout();
         AddTransaction();
         if (includeAudit)
+        {
             AddAudit();
+        }
+
         return this;
     }
 

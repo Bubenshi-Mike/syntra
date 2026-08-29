@@ -31,7 +31,9 @@ public sealed class TracingBehavior<TRequest, TResponse>(
             var response = await next(cancellationToken).ConfigureAwait(false);
 
             if (response is Result r)
+            {
                 activity?.SetTag(ActivityTagNames.Success, r.IsSuccess);
+            }
 
             return response;
         }
