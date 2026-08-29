@@ -1,7 +1,6 @@
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Syntra.Abstractions.Notifications;
 using Syntra.Execution;
 using Syntra.Notifications;
 using Syntra.Options;

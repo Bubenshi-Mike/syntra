@@ -1,8 +1,6 @@
 using System.Collections.Immutable;
-using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace Syntra.SourceGenerator;
 
@@ -28,7 +26,9 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
     private static HandlerDescriptorModel? GetHandlerModel(GeneratorSyntaxContext context)
     {
         if (context.SemanticModel.GetDeclaredSymbol(context.Node) is not INamedTypeSymbol typeSymbol)
+        {
             return null;
+        }
 
         INamedTypeSymbol? requestHandler = null;
         foreach (var iface in typeSymbol.AllInterfaces)
@@ -42,10 +42,15 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
         }
 
         if (requestHandler is null || requestHandler.TypeArguments.Length < 2)
+        {
             return null;
+        }
 
         if (requestHandler.TypeArguments[0] is not INamedTypeSymbol requestType)
+        {
             return null;
+        }
+
         var handleAsync = FindHandleAsync(typeSymbol);
         var hasCt = handleAsync is not null && HandleAsyncUsesCancellationToken(handleAsync);
 
@@ -68,7 +73,9 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
         foreach (var member in type.GetMembers("HandleAsync"))
         {
             if (member is IMethodSymbol { Parameters.Length: >= 1 } m)
+            {
                 return m;
+            }
         }
 
         return null;
@@ -77,7 +84,9 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
     private static bool HandleAsyncUsesCancellationToken(IMethodSymbol handleAsync)
     {
         if (handleAsync.Parameters.Length < 2)
+        {
             return false;
+        }
 
         var last = handleAsync.Parameters[handleAsync.Parameters.Length - 1];
         return last.Type.Name == "CancellationToken";
@@ -102,7 +111,9 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
             var request = kvp.Key;
             var list = kvp.Value;
             if (list.Count <= 1)
+            {
                 continue;
+            }
 
             foreach (var h in list)
             {
@@ -116,7 +127,10 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
 
         var handledRequestsBuilder = ImmutableHashSet.CreateBuilder<INamedTypeSymbol>(SymbolEqualityComparer.Default);
         foreach (var key in byRequest.Keys)
+        {
             handledRequestsBuilder.Add(key);
+        }
+
         var handledRequests = handledRequestsBuilder.ToImmutable();
 
         foreach (var h in handlers)
@@ -150,7 +164,9 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
         foreach (var iface in type.AllInterfaces)
         {
             if (iface.OriginalDefinition.MetadataName is "ICommand" or "ICommand`1")
+            {
                 return true;
+            }
         }
 
         return false;
@@ -167,25 +183,39 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
             foreach (var node in tree.GetRoot().DescendantNodes())
             {
                 if (node is not TypeDeclarationSyntax typeDecl)
+                {
                     continue;
+                }
 
                 if (model.GetDeclaredSymbol(typeDecl) is not INamedTypeSymbol typeSymbol)
+                {
                     continue;
+                }
 
                 if (typeSymbol.TypeKind is not (TypeKind.Class or TypeKind.Struct))
+                {
                     continue;
+                }
 
                 if (typeSymbol.IsAbstract)
+                {
                     continue;
+                }
 
                 if (typeSymbol.AllInterfaces.Any(static i => i.OriginalDefinition.MetadataName == "IRequestHandler`2"))
+                {
                     continue;
+                }
 
                 if (!ImplementsIRequest(typeSymbol))
+                {
                     continue;
+                }
 
                 if (handledRequestTypes.Contains(typeSymbol))
+                {
                     continue;
+                }
 
                 context.ReportDiagnostic(
                     Diagnostic.Create(
@@ -201,7 +231,9 @@ public sealed class SyntraHandlerGenerator : IIncrementalGenerator
         foreach (var iface in typeSymbol.AllInterfaces)
         {
             if (iface is { IsGenericType: true } && iface.OriginalDefinition.MetadataName == "IRequest`1")
+            {
                 return true;
+            }
         }
 
         return false;

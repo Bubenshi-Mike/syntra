@@ -1,6 +1,5 @@
 using Syntra.Abstractions.Notifications;
 using Syntra.Abstractions.Requests;
-using Syntra.Abstractions.Results;
 
 namespace Syntra.Unit.Tests.Tests.Unit.Shared;
 

@@ -22,24 +22,36 @@ public sealed class PipelineBehaviorOrderAnalyzer : DiagnosticAnalyzer
     private static void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
     {
         if (context.Node is not InvocationExpressionSyntax invocation)
+        {
             return;
+        }
 
         var semanticModel = context.SemanticModel;
         if (semanticModel.GetSymbolInfo(invocation).Symbol is not IMethodSymbol method)
+        {
             return;
+        }
 
         if (method.Name != "AddSyntra")
+        {
             return;
+        }
 
         if (method.Parameters.Length < 2)
+        {
             return;
+        }
 
         var configureArg = invocation.ArgumentList.Arguments[method.Parameters.Length - 1];
         if (configureArg.Expression is not AnonymousFunctionExpressionSyntax lambda)
+        {
             return;
+        }
 
         if (lambda.Body is null)
+        {
             return;
+        }
 
         int? scanMin = null;
         int? addBehaviorsMin = null;
@@ -47,10 +59,14 @@ public sealed class PipelineBehaviorOrderAnalyzer : DiagnosticAnalyzer
         foreach (var node in lambda.Body.DescendantNodes())
         {
             if (node is not InvocationExpressionSyntax inner)
+            {
                 continue;
+            }
 
             if (semanticModel.GetSymbolInfo(inner).Symbol is not IMethodSymbol innerMethod)
+            {
                 continue;
+            }
 
             if (innerMethod.Name == "ScanAssemblies")
             {
@@ -65,7 +81,9 @@ public sealed class PipelineBehaviorOrderAnalyzer : DiagnosticAnalyzer
         }
 
         if (scanMin is null || addBehaviorsMin is null)
+        {
             return;
+        }
 
         if (scanMin.Value < addBehaviorsMin.Value)
         {

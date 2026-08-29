@@ -1,9 +1,7 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Syntra.Abstractions.Mediator;
-using Syntra.Abstractions.Results;
 using Syntra.DependencyInjection.Registration;
 
 namespace Syntra.Integration.Tests.Tests.Integration.Behaviors;
@@ -25,7 +23,7 @@ public sealed class CachingIntegrationTests
         using var scope = sp.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<ISyntraMediator>();
 
-        var r = await mediator.SendAsync(new IntegPingQuery()).ConfigureAwait(false);
+        var r = await mediator.SendAsync(new IntegPingQuery());
 
         Assert.True(r.IsSuccess);
         Assert.Equal("ok", r.Value);

@@ -23,7 +23,7 @@ public sealed class PipelineOrderTests
             new UnitPingQuery(),
             behaviors);
 
-        _ = await pipeline(CancellationToken.None).ConfigureAwait(false);
+        _ = await pipeline(CancellationToken.None);
 
         Assert.Equal(new[] { "a", "b" }, order);
     }

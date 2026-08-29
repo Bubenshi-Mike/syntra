@@ -27,5 +27,5 @@ public interface INotificationHandler<in TNotification>
     /// </summary>
     /// <param name="notification">The notification to process. Never <c>null</c>.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
-    Task HandleAsync(TNotification notification, CancellationToken cancellationToken = default);
+    public Task HandleAsync(TNotification notification, CancellationToken cancellationToken = default);
 }

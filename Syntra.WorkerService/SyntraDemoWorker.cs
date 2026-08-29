@@ -27,7 +27,9 @@ public sealed class SyntraDemoWorker(IServiceScopeFactory scopeFactory, ILogger<
             logger.LogInformation("Streaming slice batch (iteration {Tick})", tick);
             await foreach (var line in mediator.CreateStreamAsync(new SliceStreamQuery(4), stoppingToken)
                                .ConfigureAwait(false))
+            {
                 logger.LogInformation("  stream: {Line}", line);
+            }
 
             try
             {

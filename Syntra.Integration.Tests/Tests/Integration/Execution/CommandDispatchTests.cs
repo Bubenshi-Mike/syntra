@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Syntra.Abstractions.Mediator;
-using Syntra.Abstractions.Results;
 using Syntra.DependencyInjection.Registration;
 
 namespace Syntra.Integration.Tests.Tests.Integration.Execution;
@@ -21,7 +20,7 @@ public sealed class CommandDispatchTests
         using var scope = sp.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<ISyntraMediator>();
 
-        var result = await mediator.SendAsync(new IntegPingQuery()).ConfigureAwait(false);
+        var result = await mediator.SendAsync(new IntegPingQuery());
 
         Assert.True(result.IsSuccess);
         Assert.Equal("ok", result.Value);

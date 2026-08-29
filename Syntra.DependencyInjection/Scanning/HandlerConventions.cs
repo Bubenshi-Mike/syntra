@@ -1,7 +1,5 @@
 using FluentValidation;
 using Syntra.Abstractions.Guards;
-using Syntra.Abstractions.Handlers;
-using Syntra.Abstractions.Notifications;
 
 namespace Syntra.DependencyInjection.Scanning;
 
@@ -38,12 +36,16 @@ public static class HandlerConventions
     private static bool ImplementsOpenGeneric(Type type, Type openGenericDefinition)
     {
         if (type.IsGenericType && type.GetGenericTypeDefinition() == openGenericDefinition)
+        {
             return true;
+        }
 
         foreach (var iface in type.GetInterfaces())
         {
             if (iface.IsGenericType && iface.GetGenericTypeDefinition() == openGenericDefinition)
+            {
                 return true;
+            }
         }
 
         return false;

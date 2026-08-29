@@ -21,7 +21,7 @@ public sealed class NotificationFanOutTests
         using var scope = sp.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<ISyntraMediator>();
 
-        await mediator.PublishAsync(new IntegEvent()).ConfigureAwait(false);
+        await mediator.PublishAsync(new IntegEvent());
 
         Assert.Equal(1, IntegEventHandler.CallCount);
     }

@@ -16,7 +16,7 @@ public sealed class NotificationPublisherTests
             new DelegatingHandler(_ => order.Add(2)),
         ];
 
-        await publisher.PublishAsync(handlers, new TestNotif(), CancellationToken.None).ConfigureAwait(false);
+        await publisher.PublishAsync(handlers, new TestNotif(), CancellationToken.None);
 
         Assert.Equal(new[] { 1, 2 }, order);
     }

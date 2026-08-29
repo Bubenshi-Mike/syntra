@@ -213,7 +213,9 @@ public static class ResultExtensions
             .ToArray();
 
         if (errors.Length > 0)
+        {
             return Result.Failure<IReadOnlyList<T>>(errors);
+        }
 
         IReadOnlyList<T> values = results.Select(static r => r.Value).ToList();
         return Result.Success(values);

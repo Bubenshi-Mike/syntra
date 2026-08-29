@@ -13,7 +13,7 @@ internal interface INotificationHandlerWrapper
     /// <param name="publisher">The strategy used to invoke the handlers.</param>
     /// <param name="serviceProvider">Scoped DI container for resolving notification handlers.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
-    Task PublishAsync(
+    public Task PublishAsync(
         object notification,
         INotificationPublisher publisher,
         IServiceProvider serviceProvider,
