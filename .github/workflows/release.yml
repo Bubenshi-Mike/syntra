@@ -1,7 +1,12 @@
-# Push packages to NuGet.org on every merge to main, and (as a manual override) whenever a
-# version tag is pushed. Either way, the actual package version is always computed from the
-# commit count, never parsed from a tag name (see the "Compute version" step below) - a pushed
-# tag is just an alternate way to kick off a publish, not a source of truth for the version.
+# Push packages to NuGet.org on every merge to main that actually touches something a package
+# ships (source of a packable project, shared build/version metadata, or the embedded
+# README/LICENSE/icon), and unconditionally whenever a version tag is pushed as a manual
+# override. Either way, the actual package version is always computed from the merge count,
+# never parsed from a tag name (see the "Compute version" step below) - a pushed tag just starts
+# the publish, it isn't a source of truth for the version.
+# A docs-only, CI-only, sample-only, or test-only merge to main is intentionally skipped (see
+# the "Decide whether to publish" step) so the published version doesn't churn for changes that
+# don't affect any package's content.
 # Repository URL in Directory.Build.props must match this repo.
 # Add NUGET_API_KEY as a repository secret.
 
@@ -27,7 +32,30 @@ jobs:
         with:
           fetch-depth: 0
 
+      # A pushed tag is a deliberate, explicit "publish this" act - always honor it regardless
+      # of what changed. A push to main only publishes if it touched something that actually
+      # ends up in a package: a packable project's source, shared build/version metadata, or
+      # the README/LICENSE/icon every package embeds. Anything else (docs, CI-only tweaks,
+      # samples, tests, CONTRIBUTING/SECURITY/etc.) is skipped so the published version doesn't
+      # churn for changes nobody consuming the packages would ever see.
+      - name: Decide whether to publish
+        id: gate
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed=$(git diff --name-only HEAD^ HEAD)
+          echo "Changed paths:"
+          echo "$changed"
+          if echo "$changed" | grep -qE '^(Syntra\.Abstractions|Syntra|Syntra\.Behaviors|Syntra\.DependencyInjection|Syntra\.Analyzers|Syntra\.Diagnostics|Syntra\.SourceGenerator)/|^(Directory\.Build\.props|Directory\.Build\.targets|Directory\.Packages\.props|README\.md|LICENSE|icon\.png)$'; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-dotnet@v4
+        if: steps.gate.outputs.publish == 'true'
         with:
           dotnet-version: '10.0.x'
 
@@ -39,14 +67,17 @@ jobs:
       # Directory.Build.props - bump both together for a real breaking-milestone Major change.
       - name: Compute version
         id: version
+        if: steps.gate.outputs.publish == 'true'
         run: |
           count=$(git rev-list --count --merges --grep="^Merge pull request" HEAD)
           echo "value=$(( 2 + count / 10 )).$(( count % 10 )).0" >> "$GITHUB_OUTPUT"
 
       - name: Pack
+        if: steps.gate.outputs.publish == 'true'
         run: dotnet pack Syntra.slnx -c Release -o "${{ github.workspace }}/artifacts" -p:Version=${{ steps.version.outputs.value }}
 
       - name: Push to NuGet.org
+        if: steps.gate.outputs.publish == 'true'
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
