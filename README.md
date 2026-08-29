@@ -13,7 +13,7 @@ Syntra is a **.NET 10** mediator-style library with **CQRS-friendly** requests, 
 | `Syntra.Behaviors` | Cross-cutting behaviors (validation, caching, retry, auth, audit, …). |
 | `Syntra.DependencyInjection` | `AddSyntra`, Scrutor scanning, configuration binding. |
 | `Syntra.Analyzers` | Roslyn analyzers (reference as analyzer; `PrivateAssets="all"`). |
-| `Syntra.Diagnostics` | Optional diagnostics integration. |
+| `Syntra.Diagnostics` | Opt-in tracing (`ActivitySource`) and metrics behaviors — enable with `.AddBehaviors(b => b.AddStandardPipeline().AddDiagnostics())`. |
 | `Syntra.SourceGenerator` | Optional source generators. |
 
 ## Quick start

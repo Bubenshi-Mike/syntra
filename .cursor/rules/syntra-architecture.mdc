@@ -15,7 +15,7 @@ alwaysApply: true
 - **Abstractions** (`Abstractions/`): zero external NuGet packages; no DI registration code.
 - **Core** (`Syntra/`): references **only** Abstractions.
 - **Behaviors** (`Behaviors/`): may reference Abstractions + Core (`Syntra`).
-- **DependencyInjection** (`DependencyInjection/`): may reference Core + Abstractions + Behaviors (registration, scanning).
+- **DependencyInjection** (`DependencyInjection/`): may reference Core + Abstractions + Behaviors + Diagnostics (registration, scanning).
 - Core **must not** reference DependencyInjection or Behaviors.
 
 ## Naming (assemblies / folders)

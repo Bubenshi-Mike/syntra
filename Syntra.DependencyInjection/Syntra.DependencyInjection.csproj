@@ -12,6 +12,7 @@
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\Syntra.Behaviors\Syntra.Behaviors.csproj" />
+    <ProjectReference Include="..\Syntra.Diagnostics\Syntra.Diagnostics.csproj" />
     <ProjectReference Include="..\Syntra\Syntra.csproj" />
   </ItemGroup>
 

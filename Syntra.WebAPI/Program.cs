@@ -35,7 +35,7 @@ builder.Services.UseAuditWriter<SampleAuditWriter>();
 builder.Services.UseTransactionManager<SampleTransactionManager>();
 
 builder.Services.AddSyntra(builder.Configuration, c => c
-    .AddBehaviors(b => b.AddStandardPipeline())
+    .AddBehaviors(b => b.AddStandardPipeline().AddDiagnostics())
     .ScanAssemblies(typeof(Program).Assembly));
 
 var app = builder.Build();
