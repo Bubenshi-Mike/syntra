@@ -20,20 +20,7 @@ Syntra is a **.NET 10** mediator-style library with **CQRS-friendly** requests, 
 | `Syntra.DependencyInjection` | `AddSyntra`, Scrutor scanning, configuration binding. |
 | `Syntra.Analyzers` | Roslyn analyzers (reference as analyzer; `PrivateAssets="all"`). |
 | `Syntra.Diagnostics` | Opt-in tracing (`ActivitySource`) and metrics behaviors — enable with `.AddBehaviors(b => b.AddStandardPipeline().AddDiagnostics())`. |
-| `Syntra.SourceGenerator` | Compile-time validation of handler registrations; generates a small build-time hint file, not full registration code — see [CHANGELOG](CHANGELOG.md). |
-
-## How a request flows through Syntra
-
-```mermaid
-flowchart LR
-    Caller(["Caller"]) -->|SendAsync| Mediator["ISyntraMediator"]
-    Mediator --> B1["Pipeline behaviors<br/>(logging, validation, auth, caching, retry, …)"]
-    B1 --> Handler["IRequestHandler&lt;TRequest, TResponse&gt;"]
-    Handler -->|"Result / Result&lt;T&gt;"| B1
-    B1 -->|"Result / Result&lt;T&gt;"| Caller
-```
-
-Streaming queries follow a parallel path through `CreateStreamAsync`, returning `IAsyncEnumerable<T>` instead of a single `Result`.
+| `Syntra.SourceGenerator` | Optional source generators. |
 
 ## Quick start
 
