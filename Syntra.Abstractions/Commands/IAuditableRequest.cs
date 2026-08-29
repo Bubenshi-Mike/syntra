@@ -21,16 +21,16 @@ public interface IAuditableRequest
     /// The identity (user ID, service account name, etc.) that initiated the request.
     /// <c>null</c> indicates an anonymous or system-initiated action.
     /// </summary>
-    string? InitiatedBy { get; }
+    public string? InitiatedBy { get; }
 
     /// <summary>
     /// The UTC timestamp at which the request was created/submitted.
     /// </summary>
-    DateTimeOffset RequestedAt { get; }
+    public DateTimeOffset RequestedAt { get; }
 
     /// <summary>
     /// Optional free-form description of the business reason for this action.
     /// Useful for compliance scenarios where a human-readable justification is required.
     /// </summary>
-    string? Reason => null;
+    public string? Reason => null;
 }

@@ -12,19 +12,19 @@ namespace Syntra.Abstractions.Queries;
 public interface ICacheableQuery
 {
     /// <summary>A unique, deterministic cache key for this query instance.</summary>
-    string CacheKey { get; }
+    public string CacheKey { get; }
 
     /// <summary>
     /// The absolute duration for which the cached response is valid.
     /// <c>null</c> defers to the cache provider's default expiry policy.
     /// </summary>
-    TimeSpan? CacheDuration { get; }
+    public TimeSpan? CacheDuration { get; }
 
     /// <summary>
     /// Optional cache region / tag used for bulk invalidation.
     /// When <c>null</c>, no region is associated with the entry.
     /// </summary>
-    string? CacheRegion => null;
+    public string? CacheRegion => null;
 }
 
 /// <summary>

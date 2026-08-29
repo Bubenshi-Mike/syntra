@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Requests;
-
 namespace Syntra.Abstractions.Commands;
 
 /// <summary>
@@ -21,7 +19,7 @@ public interface IIdempotentCommand : ICommand
     /// Two commands with the same key represent the same intent and
     /// the second should be a no-op returning the original result.
     /// </summary>
-    Guid IdempotencyKey { get; }
+    public Guid IdempotencyKey { get; }
 }
 
 /// <summary>
@@ -31,5 +29,5 @@ public interface IIdempotentCommand : ICommand
 public interface IIdempotentCommand<TResponse> : ICommand<TResponse>
 {
     /// <inheritdoc cref="IIdempotentCommand.IdempotencyKey"/>
-    Guid IdempotencyKey { get; }
+    public Guid IdempotencyKey { get; }
 }

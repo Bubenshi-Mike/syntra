@@ -17,7 +17,9 @@ public sealed class AuditBehavior<TRequest, TResponse>(
         CancellationToken cancellationToken = default)
     {
         if (request is not IAuditableRequest auditable)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         var response = await next(cancellationToken).ConfigureAwait(false);
 

@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Scalar.AspNetCore;
 using Syntra.DependencyInjection.Extensions;
 using Syntra.DependencyInjection.Registration;
-using Scalar.AspNetCore;
 using Syntra.WebAPI.Api;
 using Syntra.WebAPI.Application;
 using Syntra.WebAPI.Infrastructure;

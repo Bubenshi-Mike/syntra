@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -30,9 +28,14 @@ public sealed class HandlerMissingAnalyzer : DiagnosticAnalyzer
         foreach (var type in allTypes)
         {
             if (type.TypeKind is not (TypeKind.Class or TypeKind.Struct))
+            {
                 continue;
+            }
+
             if (type.IsAbstract)
+            {
                 continue;
+            }
 
             foreach (var iface in type.AllInterfaces)
             {
@@ -50,12 +53,19 @@ public sealed class HandlerMissingAnalyzer : DiagnosticAnalyzer
         foreach (var type in allTypes)
         {
             if (type.TypeKind is not (TypeKind.Class or TypeKind.Struct))
+            {
                 continue;
+            }
+
             if (type.IsAbstract)
+            {
                 continue;
+            }
 
             if (type.AllInterfaces.Any(static i => i.OriginalDefinition.MetadataName == "IRequestHandler`2"))
+            {
                 continue;
+            }
 
             if (TryGetGenericIRequest(type, out var response))
             {

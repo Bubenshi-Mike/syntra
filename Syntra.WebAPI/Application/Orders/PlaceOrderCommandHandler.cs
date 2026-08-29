@@ -15,7 +15,9 @@ public sealed class PlaceOrderCommandHandler(
         var dto = new OrderDto(id, request.ProductName, request.Quantity, DateTimeOffset.UtcNow);
 
         if (!store.TryAdd(dto))
+        {
             return Result.Failure(Error.Conflict("Order.Store", "Could not persist order (unexpected)."));
+        }
 
         logger.LogInformation("Order {OrderId} created for product {Product}", id, request.ProductName);
 

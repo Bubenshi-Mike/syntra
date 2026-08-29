@@ -18,7 +18,7 @@ internal interface IStreamHandlerWrapper<TResponse> : IStreamHandlerWrapper
     /// <param name="query">The query, cast internally to the concrete query type.</param>
     /// <param name="serviceProvider">Scoped DI container for resolving the stream handler.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
-    IAsyncEnumerable<TResponse> HandleAsync(
+    public IAsyncEnumerable<TResponse> HandleAsync(
         object query,
         IServiceProvider serviceProvider,
         CancellationToken cancellationToken);

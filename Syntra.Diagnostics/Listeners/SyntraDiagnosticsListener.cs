@@ -22,7 +22,9 @@ public sealed class SyntraDiagnosticsListener : DiagnosticListener
     public void WriteRequestCompleted(string requestTypeName, bool success, double elapsedMs)
     {
         if (!IsEnabled())
+        {
             return;
+        }
 
         Write(
             "syntra.request.completed",

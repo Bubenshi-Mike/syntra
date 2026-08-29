@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Syntra.Abstractions.Mediator;
-using Syntra.DependencyInjection.Registration;
 using Syntra.Abstractions.Notifications;
+using Syntra.DependencyInjection.Registration;
 using Syntra.Unit.Tests.Tests.Unit.Shared;
 
 namespace Syntra.Unit.Tests.Tests.Unit.Mediator;
@@ -21,6 +21,6 @@ public sealed class SyntraMediatorPublishTests
         using var scope = provider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<ISyntraMediator>();
 
-        await mediator.PublishAsync(new UnitTestNotification()).ConfigureAwait(false);
+        await mediator.PublishAsync(new UnitTestNotification());
     }
 }

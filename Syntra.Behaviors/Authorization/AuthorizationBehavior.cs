@@ -1,9 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Http;
-using Syntra.Abstractions.Guards;
-using Syntra.Behaviors.Shared;
-
 namespace Syntra.Behaviors.Authorization;
 
 /// <summary>
@@ -26,7 +20,9 @@ public sealed class AuthorizationBehavior<TRequest, TResponse>(
         CancellationToken cancellationToken = default)
     {
         if (request is not IAuthorizedRequest authorizedRequest)
+        {
             return await next(cancellationToken).ConfigureAwait(false);
+        }
 
         var httpContext = httpContextAccessor.HttpContext;
         if (httpContext is null)

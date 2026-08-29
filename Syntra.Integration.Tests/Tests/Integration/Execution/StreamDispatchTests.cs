@@ -37,7 +37,9 @@ public sealed class StreamDispatchTests
 
         var list = new List<int>();
         await foreach (var n in mediator.CreateStreamAsync(new IntegNumbersStream()).ConfigureAwait(false))
+        {
             list.Add(n);
+        }
 
         Assert.Single(list);
         Assert.Equal(10, list[0]);

@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Syntra.Abstractions.Results;
 
 namespace Syntra.Behaviors.Serialization;
 
@@ -16,7 +15,9 @@ public sealed class ResultJsonConverterFactory : JsonConverterFactory
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         if (typeToConvert == typeof(Result))
+        {
             return new NonGenericResultJsonConverter();
+        }
 
         var valueType = typeToConvert.GetGenericArguments()[0];
         return (JsonConverter)Activator.CreateInstance(typeof(GenericResultJsonConverter<>).MakeGenericType(valueType))!;
@@ -30,7 +31,9 @@ public sealed class ResultJsonConverterFactory : JsonConverterFactory
             var root = doc.RootElement;
             var isSuccess = root.GetProperty("isSuccess").GetBoolean();
             if (isSuccess)
+            {
                 return Result.Success();
+            }
 
             var error = root.GetProperty("error").Deserialize<Error>(options)
                         ?? Error.Failure("Result.Deserialize", "Missing error payload.");
@@ -61,7 +64,10 @@ public sealed class ResultJsonConverterFactory : JsonConverterFactory
             if (isSuccess)
             {
                 if (!root.TryGetProperty("value", out var valueEl))
+                {
                     return Result.Failure<TValue>(Error.Failure("Result.Deserialize", "Missing value for successful Result<T>."));
+                }
+
                 var v = valueEl.Deserialize<TValue>(options);
                 return Result.Success(v!);
             }
