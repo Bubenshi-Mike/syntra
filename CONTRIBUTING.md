@@ -4,9 +4,10 @@ Thanks for your interest in improving Syntra.
 
 ## Workflow
 
-- `main` is protected — all changes land through a pull request from a topic branch, reviewed before merge. Direct pushes to `main` aren't accepted.
+- All changes land through a pull request from a topic branch, reviewed before merge — direct pushes to `main` aren't accepted. This is currently enforced by convention only; GitHub branch protection isn't turned on yet (see [docs/BACKLOG.md](docs/BACKLOG.md#security)).
 - Branch names follow `<type>/<short-description>`, e.g. `fix/retry-behavior-timeout`, `docs/readme-badges`.
 - Keep PRs focused: one logical change per PR is easier to review than a bundle of unrelated fixes.
+- **Stacked PRs** (a branch based on another still-open PR's branch, not on `main`): if the base branch merges into `main` before the stacked PR does, merging the stacked PR afterward merges it into that now-stale base branch — not `main`. GitHub will show it as "Merged," but the content never actually reaches `main`. This has happened twice already. Before merging a PR whose base isn't `main`, confirm that base is still current, or retarget the PR to `main` first.
 
 ## Building and testing locally
 
