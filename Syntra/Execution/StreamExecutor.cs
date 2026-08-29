@@ -1,5 +1,4 @@
 using Ardalis.GuardClauses;
-using Syntra.Abstractions.Requests;
 using Syntra.Caching;
 
 namespace Syntra.Execution;

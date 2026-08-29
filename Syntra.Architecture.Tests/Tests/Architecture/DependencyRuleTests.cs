@@ -1,4 +1,3 @@
-using System.Linq;
 using NetArchTest.Rules;
 using Syntra.Abstractions.Requests;
 

@@ -61,10 +61,14 @@ public class Result
     protected Result(bool isSuccess, Error? error, IReadOnlyList<Error>? errors = null)
     {
         if (isSuccess && error is not null && error != Results.Error.None)
+        {
             throw new InvalidOperationException("A successful result cannot carry an error.");
+        }
 
         if (!isSuccess && (error is null || error == Results.Error.None))
+        {
             throw new InvalidOperationException("A failed result must carry at least one error.");
+        }
 
         IsSuccess = isSuccess;
         Error = error;
@@ -103,7 +107,9 @@ public class Result
     public static Result Failure(params Error[] errors)
     {
         if (errors is null || errors.Length == 0)
+        {
             throw new ArgumentException("At least one error is required.", nameof(errors));
+        }
 
         return new(false, errors[0], errors);
     }
@@ -121,7 +127,9 @@ public class Result
     public static Result<TValue> Failure<TValue>(params Error[] errors)
     {
         if (errors is null || errors.Length == 0)
+        {
             throw new ArgumentException("At least one error is required.", nameof(errors));
+        }
 
         return new(default, false, errors[0], errors);
     }
@@ -195,7 +203,14 @@ public class Result
     /// <param name="onFailure">Action to run on failure.</param>
     public void Match(Action onSuccess, Action<Error> onFailure)
     {
-        if (IsSuccess) onSuccess(); else onFailure(Error);
+        if (IsSuccess)
+        {
+            onSuccess();
+        }
+        else
+        {
+            onFailure(Error);
+        }
     }
 
     // =========================================================================
@@ -208,14 +223,22 @@ public class Result
     /// </summary>
     public Result Tap(Action action)
     {
-        if (IsSuccess) action();
+        if (IsSuccess)
+        {
+            action();
+        }
+
         return this;
     }
 
     /// <summary>Runs <paramref name="action"/> if this result failed, then returns <c>this</c>.</summary>
     public Result TapError(Action<Error> action)
     {
-        if (IsFailure) action(Error);
+        if (IsFailure)
+        {
+            action(Error);
+        }
+
         return this;
     }
 
@@ -232,7 +255,11 @@ public class Result
     /// <param name="error">Error to return when the condition is not met.</param>
     public Result Ensure(Func<bool> predicate, Error error)
     {
-        if (IsFailure) return this;
+        if (IsFailure)
+        {
+            return this;
+        }
+
         return predicate() ? this : Failure(error);
     }
 
@@ -278,7 +305,10 @@ public class Result
     {
         foreach (var result in results)
         {
-            if (result.IsFailure) return result;
+            if (result.IsFailure)
+            {
+                return result;
+            }
         }
         return Success();
     }
@@ -325,8 +355,11 @@ public sealed class Result<TValue> : Result
         get
         {
             if (IsFailure)
+            {
                 throw new InvalidOperationException(
                     $"Cannot access {nameof(Value)} on a failed result. Error: {Error}");
+            }
+
             return _value!;
         }
     }
@@ -351,7 +384,11 @@ public sealed class Result<TValue> : Result
     /// <param name="exceptionFactory">Receives the failure error and must return an exception.</param>
     public TValue GetValueOrThrow(Func<Error, Exception> exceptionFactory)
     {
-        if (IsFailure) throw exceptionFactory(Error);
+        if (IsFailure)
+        {
+            throw exceptionFactory(Error);
+        }
+
         return _value!;
     }
 
@@ -381,7 +418,14 @@ public sealed class Result<TValue> : Result
     /// <summary>Executes one of two actions based on success or failure.</summary>
     public void Match(Action<TValue> onSuccess, Action<Error> onFailure)
     {
-        if (IsSuccess) onSuccess(_value!); else onFailure(Error);
+        if (IsSuccess)
+        {
+            onSuccess(_value!);
+        }
+        else
+        {
+            onFailure(Error);
+        }
     }
 
     // =========================================================================
@@ -396,7 +440,10 @@ public sealed class Result<TValue> : Result
     /// <param name="mapper">Pure transformation function.</param>
     public Result<TNew> Map<TNew>(Func<TValue, TNew> mapper)
     {
-        if (IsFailure) return Failure<TNew>(Error);
+        if (IsFailure)
+        {
+            return Failure<TNew>(Error);
+        }
 
         try { return Success(mapper(_value!)); }
         catch (Exception ex) { return FromException<TNew>(ex); }
@@ -409,7 +456,10 @@ public sealed class Result<TValue> : Result
     /// <param name="mapper">Async transformation function.</param>
     public async Task<Result<TNew>> MapAsync<TNew>(Func<TValue, Task<TNew>> mapper)
     {
-        if (IsFailure) return Failure<TNew>(Error);
+        if (IsFailure)
+        {
+            return Failure<TNew>(Error);
+        }
 
         try
         {
@@ -432,7 +482,10 @@ public sealed class Result<TValue> : Result
     /// <param name="binder">Function to call with the current value.</param>
     public Result<TNew> Bind<TNew>(Func<TValue, Result<TNew>> binder)
     {
-        if (IsFailure) return Failure<TNew>(Error);
+        if (IsFailure)
+        {
+            return Failure<TNew>(Error);
+        }
 
         try { return binder(_value!); }
         catch (Exception ex) { return FromException<TNew>(ex); }
@@ -445,7 +498,10 @@ public sealed class Result<TValue> : Result
     /// <param name="binder">Async function to call with the current value.</param>
     public async Task<Result<TNew>> BindAsync<TNew>(Func<TValue, Task<Result<TNew>>> binder)
     {
-        if (IsFailure) return Failure<TNew>(Error);
+        if (IsFailure)
+        {
+            return Failure<TNew>(Error);
+        }
 
         try { return await binder(_value!).ConfigureAwait(false); }
         catch (Exception ex) { return FromException<TNew>(ex); }
@@ -458,7 +514,10 @@ public sealed class Result<TValue> : Result
     /// <param name="binder">Function to call with the current value.</param>
     public Result Bind(Func<TValue, Result> binder)
     {
-        if (IsFailure) return Failure(Error);
+        if (IsFailure)
+        {
+            return Failure(Error);
+        }
 
         try { return binder(_value!); }
         catch (Exception ex) { return FromException(ex); }
@@ -473,7 +532,11 @@ public sealed class Result<TValue> : Result
     /// </summary>
     public Result<TValue> Tap(Action<TValue> action)
     {
-        if (IsSuccess) action(_value!);
+        if (IsSuccess)
+        {
+            action(_value!);
+        }
+
         return this;
     }
 
@@ -482,14 +545,22 @@ public sealed class Result<TValue> : Result
     /// </summary>
     public async Task<Result<TValue>> TapAsync(Func<TValue, Task> action)
     {
-        if (IsSuccess) await action(_value!).ConfigureAwait(false);
+        if (IsSuccess)
+        {
+            await action(_value!).ConfigureAwait(false);
+        }
+
         return this;
     }
 
     /// <summary>Runs <paramref name="action"/> with the error if failed, then returns <c>this</c>.</summary>
     public new Result<TValue> TapError(Action<Error> action)
     {
-        if (IsFailure) action(Error);
+        if (IsFailure)
+        {
+            action(Error);
+        }
+
         return this;
     }
 
@@ -504,14 +575,22 @@ public sealed class Result<TValue> : Result
     /// </summary>
     public Result<TValue> Ensure(Func<TValue, bool> predicate, Error error)
     {
-        if (IsFailure) return this;
+        if (IsFailure)
+        {
+            return this;
+        }
+
         return predicate(_value!) ? this : Failure<TValue>(error);
     }
 
     /// <summary>Asynchronous variant of <see cref="Ensure(Func{TValue, bool}, Error)"/>.</summary>
     public async Task<Result<TValue>> EnsureAsync(Func<TValue, Task<bool>> predicate, Error error)
     {
-        if (IsFailure) return this;
+        if (IsFailure)
+        {
+            return this;
+        }
+
         return await predicate(_value!).ConfigureAwait(false) ? this : Failure<TValue>(error);
     }
 

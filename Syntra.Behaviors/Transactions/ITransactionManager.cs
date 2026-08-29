@@ -6,11 +6,11 @@ namespace Syntra.Behaviors.Transactions;
 public interface ITransactionManager
 {
     /// <summary>Begins a transaction on the underlying connection/scope.</summary>
-    Task BeginTransactionAsync(CancellationToken cancellationToken = default);
+    public Task BeginTransactionAsync(CancellationToken cancellationToken = default);
 
     /// <summary>Commits the active transaction.</summary>
-    Task CommitTransactionAsync(CancellationToken cancellationToken = default);
+    public Task CommitTransactionAsync(CancellationToken cancellationToken = default);
 
     /// <summary>Rolls back the active transaction.</summary>
-    Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
+    public Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
 }

@@ -1,5 +1,3 @@
-using Syntra.Behaviors.Shared;
-
 namespace Syntra.Behaviors.ExceptionHandling;
 
 /// <summary>

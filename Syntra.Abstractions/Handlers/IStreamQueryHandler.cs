@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Requests;
-
 namespace Syntra.Abstractions.Handlers;
 
 /// <summary>
@@ -21,7 +19,7 @@ public interface IStreamQueryHandler<in TQuery, TResponse>
     /// <param name="query">The query describing what to stream. Never <c>null</c>.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
     /// <returns>An <see cref="IAsyncEnumerable{T}"/> of <typeparamref name="TResponse"/>.</returns>
-    IAsyncEnumerable<TResponse> HandleAsync(
+    public IAsyncEnumerable<TResponse> HandleAsync(
         TQuery query,
         CancellationToken cancellationToken = default);
 }

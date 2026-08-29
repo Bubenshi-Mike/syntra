@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Results;
-
 namespace Syntra.Abstractions.Requests;
 
 /// <summary>

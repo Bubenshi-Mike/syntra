@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Requests;
-
 namespace Syntra.Abstractions.Commands;
 
 /// <summary>
@@ -22,7 +20,7 @@ public interface ITransactionalCommand : ICommand
     /// Optional isolation level hint for the transaction.
     /// <c>null</c> defers to the infrastructure default (typically <c>ReadCommitted</c>).
     /// </summary>
-    System.Data.IsolationLevel? IsolationLevel => null;
+    public System.Data.IsolationLevel? IsolationLevel => null;
 }
 
 /// <summary>
@@ -32,5 +30,5 @@ public interface ITransactionalCommand : ICommand
 public interface ITransactionalCommand<TResponse> : ICommand<TResponse>
 {
     /// <inheritdoc cref="ITransactionalCommand.IsolationLevel"/>
-    System.Data.IsolationLevel? IsolationLevel => null;
+    public System.Data.IsolationLevel? IsolationLevel => null;
 }

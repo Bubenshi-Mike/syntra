@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Syntra.Abstractions.Handlers;
-using Syntra.DependencyInjection.Registration;
 using Syntra.Abstractions.Mediator;
 using Syntra.Abstractions.Results;
+using Syntra.DependencyInjection.Registration;
 using Syntra.Unit.Tests.Tests.Unit.Shared;
 
 namespace Syntra.Unit.Tests.Tests.Unit.Mediator;
@@ -22,7 +22,7 @@ public sealed class SyntraMediatorQueryTests
         using var scope = provider.CreateScope();
         var mediator = scope.ServiceProvider.GetRequiredService<ISyntraMediator>();
 
-        var response = await mediator.SendAsync(new UnitPingQuery()).ConfigureAwait(false);
+        var response = await mediator.SendAsync(new UnitPingQuery());
 
         Assert.True(response.IsSuccess);
         Assert.Equal(42, response.Value);

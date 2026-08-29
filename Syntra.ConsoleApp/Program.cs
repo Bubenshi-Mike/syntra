@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Syntra.Abstractions.Mediator;
 using Syntra.ConsoleApp.Demo;
@@ -58,6 +58,8 @@ logger.LogInformation("Echo result: {Ok} {Value}", echo.IsSuccess, echo.IsSucces
 
 logger.LogInformation("-- Streaming query (async enumerable)");
 await foreach (var n in mediator.CreateStreamAsync(new CountdownStreamQuery(5, 1)).ConfigureAwait(false))
+{
     logger.LogInformation("  stream -> {N}", n);
+}
 
 logger.LogInformation("=== Done ===");

@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Pipelines;
-using Syntra.Abstractions.Requests;
 using Syntra.Execution;
 
 namespace Syntra.Pipelines;
@@ -24,7 +22,9 @@ internal static class PipelineBuilder<TRequest, TResponse>
             HandlerInvoker<TRequest, TResponse>.Invoke(handler, request, ct);
 
         if (behaviors.Length == 0)
+        {
             return terminal;
+        }
 
         RequestHandlerDelegate<TResponse> pipeline = terminal;
         for (var i = behaviors.Length - 1; i >= 0; i--)

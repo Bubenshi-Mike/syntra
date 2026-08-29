@@ -33,7 +33,7 @@ public interface INotificationPublisher
     /// </param>
     /// <param name="notification">The notification to deliver.</param>
     /// <param name="cancellationToken">Token to observe for cooperative cancellation.</param>
-    Task PublishAsync<TNotification>(
+    public Task PublishAsync<TNotification>(
         IEnumerable<INotificationHandler<TNotification>> handlers,
         TNotification notification,
         CancellationToken cancellationToken = default)

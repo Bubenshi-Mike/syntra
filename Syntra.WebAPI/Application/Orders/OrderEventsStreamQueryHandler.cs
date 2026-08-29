@@ -9,7 +9,9 @@ public sealed class OrderEventsStreamQueryHandler(OrderStore store) : IStreamQue
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (!store.TryGet(query.OrderId, out var order) || order is null)
+        {
             yield break;
+        }
 
         await Task.Yield();
         yield return new OrderStreamEvent("validated", DateTimeOffset.UtcNow);

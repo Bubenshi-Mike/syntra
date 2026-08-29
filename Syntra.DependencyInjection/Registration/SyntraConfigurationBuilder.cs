@@ -1,5 +1,4 @@
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Syntra.DependencyInjection.Configuration;
@@ -77,25 +76,37 @@ public sealed class SyntraConfigurationBuilder
     internal void Complete()
     {
         if (_configuration is not null)
+        {
             _services.Configure<SyntraOptions>(_configuration.GetSection(SyntraOptions.SectionName));
+        }
         else
+        {
             _services.Configure<SyntraOptions>(_ => { });
+        }
 
         if (_configureRoot is not null)
+        {
             _services.PostConfigure(_configureRoot);
+        }
 
         SyntraConfigurationBinder.RegisterOptionBridges(_services);
 
         RegisterCoreMediator(_services);
 
         if (_behaviors is not null)
+        {
             BehaviorRegistrar.Apply(_services, _behaviors);
+        }
 
         if (_assemblies.Count > 0)
+        {
             HandlerRegistrar.Register(_services, _assemblies);
+        }
 
         if (_validateDependencies)
+        {
             SyntraDependencyValidator.Validate(_services);
+        }
     }
 
     private static void RegisterCoreMediator(IServiceCollection services)

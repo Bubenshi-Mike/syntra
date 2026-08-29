@@ -1,5 +1,3 @@
-using Syntra.Abstractions.Results;
-
 namespace Syntra.Abstractions.Guards;
 
 /// <summary>
@@ -49,5 +47,5 @@ public interface IAuthorizationHandler<in TRequest>
     /// a failed <see cref="Result"/> with <see cref="ErrorType.Forbidden"/> or
     /// <see cref="ErrorType.Unauthorized"/> if not.
     /// </returns>
-    Task<Result> AuthorizeAsync(TRequest request, CancellationToken cancellationToken = default);
+    public Task<Result> AuthorizeAsync(TRequest request, CancellationToken cancellationToken = default);
 }

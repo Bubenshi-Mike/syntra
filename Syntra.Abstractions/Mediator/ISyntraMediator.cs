@@ -1,5 +1,4 @@
 using Syntra.Abstractions.Notifications;
-using Syntra.Abstractions.Requests;
 
 namespace Syntra.Abstractions.Mediator;
 
@@ -50,7 +49,7 @@ public interface ISyntraMediator
     /// <exception cref="InvalidOperationException">
     /// Thrown when no handler is registered for <paramref name="request"/>'s type.
     /// </exception>
-    Task<TResponse> SendAsync<TResponse>(
+    public Task<TResponse> SendAsync<TResponse>(
         IRequest<TResponse> request,
         CancellationToken cancellationToken = default);
 
@@ -69,7 +68,7 @@ public interface ISyntraMediator
     /// <exception cref="InvalidOperationException">
     /// Thrown when no handler is registered for <paramref name="query"/>'s type.
     /// </exception>
-    IAsyncEnumerable<TResponse> CreateStreamAsync<TResponse>(
+    public IAsyncEnumerable<TResponse> CreateStreamAsync<TResponse>(
         IStreamQuery<TResponse> query,
         CancellationToken cancellationToken = default);
 
@@ -84,7 +83,7 @@ public interface ISyntraMediator
     /// A task that completes when all handlers have been invoked
     /// (exact semantics depend on the configured <see cref="INotificationPublisher"/>).
     /// </returns>
-    Task PublishAsync<TNotification>(
+    public Task PublishAsync<TNotification>(
         TNotification notification,
         CancellationToken cancellationToken = default)
         where TNotification : INotification;

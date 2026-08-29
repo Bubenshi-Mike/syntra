@@ -20,23 +20,33 @@ public sealed class MissingCancellationTokenAnalyzer : DiagnosticAnalyzer
     private static void AnalyzeNamedType(SymbolAnalysisContext context)
     {
         if (context.Symbol is not INamedTypeSymbol type)
+        {
             return;
+        }
 
         if (type.TypeKind is not (TypeKind.Class or TypeKind.Struct))
+        {
             return;
+        }
 
         var hasRequestHandler = type.AllInterfaces.Any(static i => i.OriginalDefinition.MetadataName == "IRequestHandler`2");
         var hasStreamHandler = type.AllInterfaces.Any(static i => i.OriginalDefinition.MetadataName == "IStreamQueryHandler`2");
 
         if (!hasRequestHandler && !hasStreamHandler)
+        {
             return;
+        }
 
         var handleAsync = SymbolHelpers.FindHandleAsync(type);
         if (handleAsync is null)
+        {
             return;
+        }
 
         if (SymbolHelpers.LastParameterIsCancellationToken(handleAsync))
+        {
             return;
+        }
 
         context.ReportDiagnostic(
             Diagnostic.Create(
