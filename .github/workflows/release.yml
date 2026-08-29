@@ -1,4 +1,7 @@
-# Push packages to NuGet.org when a version tag is pushed (e.g. v0.1.0).
+# Push packages to NuGet.org on every merge to main, and (as a manual override) whenever a
+# version tag is pushed. Either way, the actual package version is always computed from the
+# commit count, never parsed from a tag name (see the "Compute version" step below) - a pushed
+# tag is just an alternate way to kick off a publish, not a source of truth for the version.
 # Repository URL in Directory.Build.props must match this repo.
 # Add NUGET_API_KEY as a repository secret.
 
@@ -6,6 +9,7 @@ name: Release
 
 on:
   push:
+    branches: [main]
     tags:
       - 'v*.*.*'
       - 'v*.*.*-*'
@@ -16,14 +20,27 @@ jobs:
     permissions:
       contents: read
     steps:
+      # Full history (not the default shallow clone) - the package version is derived from
+      # the total commit count via `git rev-list --count HEAD` (see Directory.Build.props),
+      # which needs the whole history to be accurate.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
+      # Same Major.Height.0 computation as the CI workflow, but without the -g{sha} suffix -
+      # this is a public release, not a CI build artifact. The tag that triggered this workflow
+      # is only what starts the publish; the actual version comes from the commit count so there
+      # is still no manual number-picking anywhere in the process.
+      - name: Compute version
+        id: version
+        run: echo "value=2.$(git rev-list --count HEAD).0" >> "$GITHUB_OUTPUT"
+
       - name: Pack
-        run: dotnet pack Syntra.slnx -c Release -o "${{ github.workspace }}/artifacts"
+        run: dotnet pack Syntra.slnx -c Release -o "${{ github.workspace }}/artifacts" -p:Version=${{ steps.version.outputs.value }}
 
       - name: Push to NuGet.org
         env:

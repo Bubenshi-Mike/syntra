@@ -26,13 +26,17 @@ Syntra is a **.NET 10** mediator-style library with **CQRS-friendly** requests, 
 
 Reference the packages you need (typically **Abstractions**, **Syntra**, **Behaviors**, **DependencyInjection**):
 
+Package versions auto-increment on every merge to `main` (`Major.Height.0` - see
+[CHANGELOG](CHANGELOG.md)), so pin to the current major line with a floating version instead of
+a specific number that will quickly go stale:
+
 ```xml
 <ItemGroup>
-  <PackageReference Include="Syntra.Abstractions" Version="0.1.0" />
-  <PackageReference Include="Syntra" Version="0.1.0" />
-  <PackageReference Include="Syntra.Behaviors" Version="0.1.0" />
-  <PackageReference Include="Syntra.DependencyInjection" Version="0.1.0" />
-  <PackageReference Include="Syntra.Analyzers" Version="0.1.0" PrivateAssets="all" />
+  <PackageReference Include="Syntra.Abstractions" Version="2.*" />
+  <PackageReference Include="Syntra" Version="2.*" />
+  <PackageReference Include="Syntra.Behaviors" Version="2.*" />
+  <PackageReference Include="Syntra.DependencyInjection" Version="2.*" />
+  <PackageReference Include="Syntra.Analyzers" Version="2.*" PrivateAssets="all" />
 </ItemGroup>
 ```
 
@@ -54,12 +58,17 @@ dotnet test -c Release
 dotnet pack -c Release -o ./artifacts
 ```
 
+A local pack without an explicit `-p:Version=` gets a version derived from your current commit
+(`Major.Height.0-g{shortsha}`) so it's never mistaken for an official build. CI computes and
+passes the real value explicitly - see `Directory.Build.props`.
+
+Every merge to `main` also publishes the resulting version to NuGet.org automatically - see
+`release.yml`.
+
 ## Roadmap
 
-Before a `v0.1.0` release:
+Before a `v1.0.0` release:
 
-- [ ] Publish to NuGet.org
-- [ ] Merge the CI/quality-gate and OSS-hygiene work in progress (coverage, format checks, central package management, analyzer/generator test coverage, security audit)
 - [ ] See [CHANGELOG](CHANGELOG.md) `Unreleased` for architecture changes already landed
 
 ## License
