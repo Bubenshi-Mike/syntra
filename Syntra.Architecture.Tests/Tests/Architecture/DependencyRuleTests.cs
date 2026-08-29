@@ -34,4 +34,17 @@ public sealed class DependencyRuleTests
 
         Assert.Contains(abstractions.GetName().Name, core.GetReferencedAssemblies().Select(a => a.Name));
     }
+
+    // Previously there were two IStreamQuery<T> interfaces in different namespaces (Requests and
+    // Streams), which doubled the public API surface for one concept and let SYN001/SYN010's
+    // metadata-name-based matching confuse the two. Guards against that reappearing.
+    [Fact]
+    public void Abstractions_declares_exactly_one_IStreamQuery_interface()
+    {
+        var streamQueryTypes = typeof(IRequest).Assembly.GetTypes()
+            .Where(t => t.IsInterface && t.IsGenericTypeDefinition && t.Name == "IStreamQuery`1")
+            .ToList();
+
+        Assert.Single(streamQueryTypes);
+    }
 }
