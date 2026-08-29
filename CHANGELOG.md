@@ -7,13 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Removed
+### Added
 
-- `Syntra.Abstractions.Streams.IStreamQuery<T>`, a duplicate of the canonical
-  `Syntra.Abstractions.Requests.IStreamQuery<T>` (the one the mediator's dispatch path and
-  every sample actually use). It had zero consumers in this repo and doubled the public API
-  surface for one concept. If you implemented it directly, switch to
-  `Syntra.Abstractions.Requests.IStreamQuery<T>` (same shape - drop-in).
+- Core mediator dispatch: `SendAsync` for commands/queries, `CreateStreamAsync` for streaming
+  queries, `PublishAsync` for notifications with a choice of sequential, parallel-when-all, or
+  parallel-no-wait publisher strategies.
+- Railway-oriented `Result`/`Result<T>` pattern for handler outcomes, avoiding exceptions for
+  business-rule failures.
+- Pipeline behaviors (`Syntra.Behaviors`): validation (FluentValidation), caching, retry and
+  circuit-breaker (Polly), timeout, authorization, audit, idempotency, transaction, logging,
+  performance, and exception-handling.
+- `AddSyntra()` fluent DI registration (`Syntra.DependencyInjection`), including Scrutor-based
+  assembly scanning for handlers and configuration binding for mediator options.
+- Roslyn analyzers (`Syntra.Analyzers`): missing-handler, duplicate-handler, missing
+  `CancellationToken`, naming convention, behavior registration order, and prefer-`Result`-over-throw
+  diagnostics.
+- Incremental source generator (`Syntra.SourceGenerator`) for build-time handler registration.
+- `Syntra.Diagnostics`: `ActivitySource`-based tracing and metrics behaviors — published but not
+  yet wired into `AddSyntra()`'s standard pipeline or exercised by a sample.
+- Console, Web API, and Worker Service samples demonstrating the above.
 
 ## [0.1.0] - 2026-04-11
 
