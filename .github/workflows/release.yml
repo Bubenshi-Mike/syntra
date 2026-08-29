@@ -1,6 +1,7 @@
-# Push packages to NuGet.org when a version tag is pushed (e.g. v2.15). The tag itself only
-# triggers the publish - the actual package version is computed from the commit count, not
-# parsed from the tag name (see the "Compute version" step below).
+# Push packages to NuGet.org on every merge to main, and (as a manual override) whenever a
+# version tag is pushed. Either way, the actual package version is always computed from the
+# commit count, never parsed from a tag name (see the "Compute version" step below) - a pushed
+# tag is just an alternate way to kick off a publish, not a source of truth for the version.
 # Repository URL in Directory.Build.props must match this repo.
 # Add NUGET_API_KEY as a repository secret.
 
@@ -8,6 +9,7 @@ name: Release
 
 on:
   push:
+    branches: [main]
     tags:
       - 'v*.*.*'
       - 'v*.*.*-*'
