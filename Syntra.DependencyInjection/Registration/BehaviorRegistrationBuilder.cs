@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Syntra.Behaviors.Extensions;
+using Syntra.Diagnostics.Extensions;
 
 namespace Syntra.DependencyInjection.Registration;
 
@@ -112,6 +113,17 @@ public sealed class BehaviorRegistrationBuilder
     public BehaviorRegistrationBuilder AddAudit()
     {
         Steps.Add(s => s.AddAuditBehavior());
+        return this;
+    }
+
+    /// <summary>
+    /// Registers Syntra's opt-in tracing (<see cref="Syntra.Diagnostics.Tracing.TracingBehavior{TRequest,TResponse}"/>)
+    /// and metrics (<see cref="Syntra.Diagnostics.Metrics.RequestMetricsBehavior{TRequest,TResponse}"/>) behaviors.
+    /// </summary>
+    /// <inheritdoc cref="SyntraDiagnosticsExtensions.AddSyntraDiagnostics"/>
+    public BehaviorRegistrationBuilder AddDiagnostics()
+    {
+        Steps.Add(s => s.AddSyntraDiagnostics());
         return this;
     }
 }
