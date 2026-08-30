@@ -21,7 +21,11 @@ public sealed class LoggingBehavior<TRequest, TResponse>(
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("Handling {RequestName} {@Request}", RequestName, request);
+        // Deliberately does not log the request object itself (e.g. via {@Request}
+        // destructuring) - Syntra has no way to know which properties on an arbitrary,
+        // consumer-defined request type are sensitive (passwords, tokens, PII), so logging the
+        // full object by default would leak whatever the request happens to contain.
+        logger.LogInformation("Handling {RequestName}", RequestName);
 
         var sw = Stopwatch.StartNew();
         try

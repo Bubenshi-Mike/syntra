@@ -33,3 +33,9 @@ internal sealed class UnitTestNotificationHandler : INotificationHandler<UnitTes
     public Task HandleAsync(UnitTestNotification notification, CancellationToken cancellationToken = default) =>
         Task.CompletedTask;
 }
+
+internal sealed class UnitCommandWithSecretHandler : ICommandHandler<UnitCommandWithSecret>
+{
+    public Task<Result> HandleAsync(UnitCommandWithSecret request, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Result.Success());
+}
