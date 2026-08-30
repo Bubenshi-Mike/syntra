@@ -53,6 +53,15 @@ current (or retarget the PR to `main` first).
   revisit now: should a high/critical-severity finding hard-fail CI going forward?
 - `NUGET_API_KEY` is the one credential that can push to the public package feed on every merge
   to `main` — confirm it's still valid and consider a rotation cadence.
+- **Minor, found while fixing the `Orders.Read` IDOR (see CHANGELOG):** the minimal-API path
+  (`/api/orders-minimal/...`) returns a `302` redirect-to-login for an unauthenticated caller,
+  while the MVC-controller path (`/api/orders/...`) correctly returns `401`. Not a security
+  hole — the `302` carries no data (`Content-Length: 0`), so nothing leaks — but it's an
+  inconsistent, non-API-idiomatic response for a JSON API, caused by `[ApiController]`
+  suppressing cookie-auth's default redirect challenge on the MVC side while the minimal API
+  group gets no equivalent treatment. Fix: configure the cookie handler's
+  `Events.OnRedirectToLogin` to return `401` for API-shaped requests, or add an explicit
+  `ApiExceptionFilter`-equivalent for the minimal API group.
 
 ## CI / Quality Gates
 

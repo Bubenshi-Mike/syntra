@@ -25,6 +25,7 @@ public sealed class OrdersController(ISyntraMediator mediator) : ControllerBase
     }
 
     [HttpGet("{orderId:guid}")]
+    [Authorize(Policy = "Orders.Read")]
     public async Task<IResult> GetStatus(Guid orderId, CancellationToken cancellationToken)
     {
         var result = await mediator.SendAsync(new GetOrderStatusQuery(orderId), cancellationToken).ConfigureAwait(false);
@@ -40,6 +41,7 @@ public sealed class OrdersController(ISyntraMediator mediator) : ControllerBase
     }
 
     [HttpGet("{orderId:guid}/events")]
+    [Authorize(Policy = "Orders.Read")]
     public async Task<IResult> StreamEvents(Guid orderId, CancellationToken cancellationToken)
     {
         var stream = mediator.CreateStreamAsync(new OrderEventsStreamQuery(orderId), cancellationToken);

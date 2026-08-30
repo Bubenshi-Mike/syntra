@@ -27,6 +27,20 @@ whenever that automatic bump happens, roughly every 10 merges. See
   an arbitrary, consumer-defined request type are sensitive, so the only safe default is to log
   none of them. **If you're on an earlier version and use `AddStandardPipeline()`, upgrade and
   check your log history/sinks for any credentials that may already have been captured.**
+- Follow-up sweep after the above found two more issues, both scoped to `Syntra.WebAPI` — the
+  **sample only, not a published package** — but worth fixing since it's the pattern consumers
+  copy:
+  - `ResultHttpExtensions.ToHttp()` returned `error.Message` (the raw, unfiltered
+    `exception.Message` for any unexpected error, via `Error.FromException`) as the `title` of
+    every 500 response, to any caller including unauthenticated ones. A `SqlException` with
+    connection details, a server-side file path, third-party SDK error text — all of it went
+    straight to the HTTP response. `ExceptionBehavior` already logs the full exception
+    server-side correctly; the sample now returns a generic message to the caller instead.
+  - `GetOrderStatusQuery`/`OrderEventsStreamQuery` had no authorization at all (unlike
+    `CancelOrderCommand`) — any caller could look up or watch any order by GUID. Added an
+    `Orders.Read` policy requiring authentication, matching `Orders.Cancel`'s existing model.
+    Note: `OrderDto` doesn't track an owner, so this closes anonymous access but doesn't add true
+    per-owner authorization — that would need a larger model change.
 
 ### Changed
 
