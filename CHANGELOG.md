@@ -13,6 +13,21 @@ whenever that automatic bump happens, roughly every 10 merges. See
 
 ## [Unreleased]
 
+### Security
+
+- **`LoggingBehavior` and `PerformanceBehavior` no longer log the request object's contents.**
+  Both previously interpolated the full request (`{@Request}`, plus C# records' auto-generated
+  `ToString()`) into a log message — `LoggingBehavior` on every single request at Information
+  level, `PerformanceBehavior` whenever a request exceeded its configured threshold. For any
+  request type with a sensitive field (a password, token, or other credential), that field's
+  plaintext value was written straight into whatever log sink the consuming application uses.
+  Both behaviors are part of `AddStandardPipeline()`, the documented default pipeline, so this
+  affected any application following the Quick Start as written. Fixed by logging only the
+  request's type name, never its property values — Syntra has no way to know which properties on
+  an arbitrary, consumer-defined request type are sensitive, so the only safe default is to log
+  none of them. **If you're on an earlier version and use `AddStandardPipeline()`, upgrade and
+  check your log history/sinks for any credentials that may already have been captured.**
+
 ### Changed
 
 - Package versioning is now `Major.Minor.0`, where `Minor` is the count of PRs merged into
