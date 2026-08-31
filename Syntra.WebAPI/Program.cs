@@ -29,6 +29,12 @@ builder.Services
 builder.Services.AddAuthorization(o =>
 {
     o.AddPolicy("Orders.Cancel", p => p.RequireAuthenticatedUser());
+    // GetStatus/StreamEvents previously had no authorization at all - any caller could look up
+    // or watch any order by GUID with zero ownership check. OrderDto doesn't track an owner, so
+    // this only closes the anonymous-access hole (matches Orders.Cancel's own auth model) - real
+    // per-owner authorization would need an owner field threaded through PlaceOrderCommand ->
+    // OrderDto, which is a larger change than a sample's auth wiring warrants on its own.
+    o.AddPolicy("Orders.Read", p => p.RequireAuthenticatedUser());
 });
 
 builder.Services.UseAuditWriter<SampleAuditWriter>();

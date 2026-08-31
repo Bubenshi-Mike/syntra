@@ -41,6 +41,7 @@ public static class OrdersEndpoints
                         .ConfigureAwait(false);
                     return result.ToHttp();
                 })
+            .RequireAuthorization("Orders.Read")
             .WithName("MinimalGetOrder");
 
         group.MapDelete(
@@ -61,6 +62,7 @@ public static class OrdersEndpoints
                     var stream = mediator.CreateStreamAsync(new OrderEventsStreamQuery(orderId), cancellationToken);
                     return TypedResults.Ok(stream);
                 })
+            .RequireAuthorization("Orders.Read")
             .WithName("MinimalOrderEventStream");
     }
 
